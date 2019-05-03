@@ -17,4 +17,6 @@ lex:
 
 run:
 	$(MAKE) all
-	./bin/a.out < test/enter.code
+	./bin/a.out < test/enter.code > compiled/output.cpp
+	g++ compiled/output.cpp -o compiled/output.out
+	./compiled/output.out

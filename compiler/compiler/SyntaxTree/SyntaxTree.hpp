@@ -7,13 +7,13 @@ namespace compiler {
     class SyntaxTree {
     
     public:
-        SyntaxTree();
+        SyntaxTree() = default;
         
-        virtual ~SyntaxTree();
+        virtual ~SyntaxTree() = default;
         
-        virtual std::string toCode() const;
+        virtual std::string toCode() const = 0;
     
     protected:
-        std::vector << std::unique_ptr<SyntaxTree> > children;
+        std::vector < SyntaxTree *> children;
     };
 }

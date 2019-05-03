@@ -1,4 +1,8 @@
 enter: ->
 {
+	somecode;
 
+	
+	toPrint;itWorks;
+	expression;
 }
