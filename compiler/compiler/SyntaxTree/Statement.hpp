@@ -13,7 +13,8 @@ namespace compiler {
         virtual ~Statement() {}
         
         virtual std::string toCode() const {
-        	return "printf(\"%s\\n\",\"" + children[0]->toCode() + "\");\n";
+        	return "";
+        	//return "printf(\"%s\\n\",\"" + children[0]->toCode() + "\");\n";
         }
     };
 }

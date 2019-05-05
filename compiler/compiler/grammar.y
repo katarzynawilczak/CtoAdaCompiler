@@ -19,7 +19,8 @@
 
 %define api.value.type {compiler::SyntaxTree *}
 
-%token NAME COLON RIGHT_ARROW LEFT_BRACE RIGHT_BRACE SEMICOLON
+%token NAME COLON RIGHT_ARROW LEFT_CURLY_BRACKET RIGHT_CURLY_BRACKET SEMICOLON
+%token LEFT_ROUND_BRACKET RIGHT_ROUND_BRACKET INT MAIN
 
 
 %start input
@@ -27,24 +28,28 @@
 %%
 
 input:
-	function function_list											{root.reset(new Input($1, $2));}
+	main_function function_list														{root.reset(new Input($1, $2));}
 
 function_list:
-	function function_list											{$$ = $1;}
-	| %empty														{$$ = nullptr;}
+	function function_list														{$$ = $1;}
+	| main_function function_list
+	| %empty																	{$$ = nullptr;}
+
+main_function:
+	INT MAIN LEFT_ROUND_BRACKET RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET {$$ = $6;}
 
 function:
-    NAME COLON RIGHT_ARROW LEFT_BRACE statements RIGHT_BRACE		{$$ = new compiler::Function($1, $5);}
+    NAME COLON RIGHT_ARROW LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET	{$$ = new compiler::Function($1, $5);}
     
 statements:
-    statements statement											{$$ = new compiler::Statements($1, $2);}
-    | %empty														{$$ = nullptr;}
+    statements statement														{$$ = new compiler::Statements($1, $2);}
+    | %empty																	{$$ = nullptr;}
 
 statement:
-    name SEMICOLON													{$$ = new compiler::Statement($1);}
+    name SEMICOLON																{$$ = new compiler::Statement($1);}
     
 name:
-	NAME															{$$ = new compiler::Name(yytext);}
+	NAME																		{$$ = new compiler::Name(yytext);}
 
 %%  //implementations
 

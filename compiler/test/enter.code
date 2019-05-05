@@ -1,8 +1,4 @@
-enter: ->
-{
-	somecode;
+int main() {
 
-	
-	toPrint;itWorks;
-	expression;
+
 }
