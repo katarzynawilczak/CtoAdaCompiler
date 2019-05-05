@@ -7,9 +7,10 @@ namespace compiler {
     
     public:
     
-        Input(SyntaxTree *name, SyntaxTree *statements) {
-        	children.push_back(name);
-        	children.push_back(statements);
+        Input(SyntaxTree *libraries, SyntaxTree *mainFunction, SyntaxTree *functions) {
+            children.push_back(libraries);
+        	children.push_back(mainFunction);
+        	children.push_back(functions);
         }
         
         virtual ~Input() {}

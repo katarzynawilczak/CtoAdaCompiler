@@ -25,4 +25,4 @@ run:
 	
 clean:
 	rm -f compiled/output.out bin/a.out compiler/grammar.tab.* compiler/lex.yy.* compiler/lexgram.a
-	rmdir bin
+	find . -empty -type d -delete
