@@ -19,10 +19,12 @@
 
 %define api.value.type {compiler::SyntaxTree *}
 
-%token NAME COLON RIGHT_ARROW LEFT_CURLY_BRACKET RIGHT_CURLY_BRACKET SEMICOLON
-%token LEFT_ROUND_BRACKET RIGHT_ROUND_BRACKET MAIN
+%token NAME LEFT_CURLY_BRACKET RIGHT_CURLY_BRACKET SEMICOLON
+%token LEFT_ROUND_BRACKET RIGHT_ROUND_BRACKET
+%token MAIN
 %token RIGHT_ANGLE_BRACKET LEFT_ANGLE_BRACKET
 %token INCLUDE DOT
+%token INT DOUBLE FLOAT CHAR
 
 
 %start input
@@ -30,7 +32,7 @@
 %%
 
 input:
-	 libraries main_function function_list										{root.reset(new Input($1, $2, $3));}
+	 libraries function_list main_function function_list						{root.reset(new Input($1, $2, $3));}
 
 libraries:
 	library libraries															{$$ = $1;}
@@ -51,14 +53,20 @@ main_function:
 	MAIN LEFT_ROUND_BRACKET RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET {$$ = $5;}
 
 function:
-     NAME LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET  	{$$ = new compiler::Function($1, $4);}
+    type NAME LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET  	{$$ = new compiler::Function($1, $4);}
      
 argument_list:
-	argument																	{$$ = $1;}
+	argument argument_list																	{$$ = $1;}
 	| %empty																	{$$ = nullptr;}
 	
 argument:
-	NAME																		{$$ = $1;}
+	type NAME																	{$$ = $1;}
+    
+type:
+	INT
+	| DOUBLE
+	| FLOAT
+	| CHAR
     
 statements:
     statements statement														{$$ = new compiler::Statements($1, $2);}

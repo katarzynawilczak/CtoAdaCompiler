@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <memory>
+#include <stdio.h>
 #include "SyntaxTree/SyntaxTree.hpp"
 using namespace std;
 
@@ -10,6 +11,7 @@ extern std::unique_ptr<compiler::SyntaxTree> root;
     
 int main() {
     int result = yyparse();
+
     if (result == 0)
         cout << "\n\nValid input" << endl;
     else
