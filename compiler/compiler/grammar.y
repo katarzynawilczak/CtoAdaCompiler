@@ -1,6 +1,7 @@
 
 %code requires {
 	#include "SyntaxTree/SyntaxTree.hpp"
+	#include<iostream>
 }
 
 %{  //definitions
@@ -23,8 +24,11 @@
 %token LEFT_ROUND_BRACKET RIGHT_ROUND_BRACKET
 %token MAIN
 %token RIGHT_ANGLE_BRACKET LEFT_ANGLE_BRACKET
-%token INCLUDE DOT
-%token INT DOUBLE FLOAT CHAR
+%token INCLUDE DOT COMMA
+%token INT_TYPE DOUBLE_TYPE FLOAT_TYPE CHAR_TYPE STRING_TYPE STRING
+%token PRINTF
+%token EQUALS
+%token QUOTE
 
 
 %start input
@@ -32,56 +36,59 @@
 %%
 
 input:
-	 libraries function_list main_function function_list						{root.reset(new Input($1, $2, $3));}
+	 libraries function_list													{root.reset(new Input($1, $2));}
 
 libraries:
-	library libraries															{$$ = $1;}
-	| %empty																	{$$ = nullptr;}
+	library libraries
+	| %empty
 	
 library:
-	INCLUDE LEFT_ANGLE_BRACKET lib_name RIGHT_ANGLE_BRACKET						{$$ = $3;}
+	INCLUDE LEFT_ANGLE_BRACKET lib_name RIGHT_ANGLE_BRACKET						{std::cout<<"\n\n\nLibrary\n";}
 	
 lib_name:
-	NAME DOT NAME																{$$ = $1;}
-	| NAME																		{$$ = $1;}
+	NAME DOT NAME
+	| NAME
 	
 function_list:
-	function function_list														{$$ = $1;}
-	| %empty																	{$$ = nullptr;}
-
-main_function:
-	MAIN LEFT_ROUND_BRACKET RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET {$$ = $5;}
+	function function_list
+	| %empty
 
 function:
-    type NAME LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET  	{$$ = new compiler::Function($1, $4);}
+    type NAME LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET  	{std::cout<<"Function detected\n";}
      
 argument_list:
-	argument argument_list																	{$$ = $1;}
-	| %empty																	{$$ = nullptr;}
+	argument COMMA argument_list
+	| argument argument_list
+	| %empty
 	
 argument:
-	type NAME																	{$$ = $1;}
+	type NAME
     
 type:
-	INT
-	| DOUBLE
-	| FLOAT
-	| CHAR
+	INT_TYPE
+	| DOUBLE_TYPE
+	| FLOAT_TYPE
+	| CHAR_TYPE
+	| STRING_TYPE
     
 statements:
-    statements statement														{$$ = new compiler::Statements($1, $2);}
-    | %empty																	{$$ = nullptr;}
+    statement statements
+    | %empty
 
 statement:
-    name SEMICOLON																{$$ = new compiler::Statement($1);}
+    variable
+    | PRINTF LEFT_ROUND_BRACKET QUOTE NAME QUOTE RIGHT_ROUND_BRACKET SEMICOLON	{std::cout<<"printf function called\n";}
+    
+variable:
+    type name SEMICOLON		{std::cout<<"new variable\n";}
     
 name:
-	NAME																		{$$ = new compiler::Name(yytext);}
+	NAME
 
 %%  //implementations
 
 void yyerror(char const *x)
 {
-    printf ("Error %s\n", x);
+    printf ("Error: %s\n", x);
     exit(1);
 }

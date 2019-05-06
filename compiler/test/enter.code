@@ -1,10 +1,10 @@
 
-// comment line
+// #include <math.h>
 #include <stdio.h>
 
 double iloczyn (double a, double second) {
-	/*double c;
-	double c = 2.3;
+	double c;
+	/*double c = 2.3;
 	c = a*b;
 	return c;*/
 }
@@ -13,10 +13,15 @@ double iloczyn (double a, double second) {
 int main() {
 	//again 2+4
 	
+	printf("write");
+	
 	//and another here!!!
 	/*block 
 	{}
+	int a;
 		comment*/
+		
+	int variable;
 }
 
 int sum (int a, int b) {

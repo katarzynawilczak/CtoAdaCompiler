@@ -13,7 +13,7 @@ int main() {
     int result = yyparse();
 
     if (result == 0)
-        cout << "\n\nValid input" << endl;
+        cout << "\nValid input" << endl;
     else
         cout << "Invalid input" << endl;
     cout << "The input has " << yylineno << " lines\n\n" << endl;
