@@ -27,12 +27,24 @@ linefeed    	\n
 ")"						{return RIGHT_ROUND_BRACKET;}
 "<"						{return LEFT_ANGLE_BRACKET;}
 ">"						{return RIGHT_ANGLE_BRACKET;}
+">="					{return GREATER_EQUAL;}
+"<="					{return LESS_EQUAL;}
+"=="					{return EQUAL_EQUAL;}
+"!="					{return NOT_EQUAL;}
+"&&"					{return AND;}
+"||"					{return OR;}
 "#include"				{return INCLUDE;}
 "printf"				{return PRINTF;}
 "int"					{return INT_TYPE;}
 "char"					{return CHAR_TYPE;}
 "double"				{return DOUBLE_TYPE;}
 "float"					{return FLOAT_TYPE;}
+"return"				{return RETURN;}
+"while"					{return WHILE;}
+"do"					{return DO;}
+"for"					{return FOR;}
+"if"					{return IF;}
+"else"					{return ELSE;}
 {name}                  {return NAME;}
 {string}				{return STRING;}
 {comment_line}			{std::cout<<"Comment line ignored\n";}

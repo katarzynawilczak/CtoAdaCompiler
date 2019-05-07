@@ -29,6 +29,10 @@
 %token PRINTF
 %token EQUALS
 %token QUOTE
+%token RETURN
+%token WHILE DO FOR IF ELSE
+%token GREATER_EQUAL LESS_EQUAL EQUAL_EQUAL NOT_EQUAL
+%token AND OR
 
 
 %start input
@@ -58,11 +62,11 @@ function:
      
 argument_list:
 	argument COMMA argument_list
-	| argument argument_list
-	| %empty
+	| argument
 	
 argument:
 	type NAME
+	| %empty
     
 type:
 	INT_TYPE
@@ -78,12 +82,36 @@ statements:
 statement:
     variable
     | PRINTF LEFT_ROUND_BRACKET QUOTE NAME QUOTE RIGHT_ROUND_BRACKET SEMICOLON	{std::cout<<"printf function called\n";}
+	| while
+	| RETURN name SEMICOLON
     
 variable:
     type name SEMICOLON		{std::cout<<"new variable\n";}
     
 name:
 	NAME
+
+while:
+	WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
+	| WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement
+	
+conditions:
+	condition AND condition
+	| condition OR condition
+	| condition
+
+condition:
+	name condition_operand name
+	| name
+	| QUOTE name QUOTE
+
+condition_operand:
+	LEFT_CURLY_BRACKET
+	| RIGHT_CURLY_BRACKET
+	| GREATER_EQUAL
+	| LESS_EQUAL
+	| EQUAL_EQUAL
+	| NOT_EQUAL
 
 %%  //implementations
 

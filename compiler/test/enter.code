@@ -22,8 +22,17 @@ int main() {
 		comment*/
 		
 	int variable;
+
+	while(a==variable){
+		int b;
+	}
+	
+	while("abc") printf("abc");
+	
 }
 
 int sum (int a, int b) {
+	int c;
+	return c;
 	//return a+b;
 }
