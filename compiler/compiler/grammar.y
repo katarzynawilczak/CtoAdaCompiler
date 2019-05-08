@@ -94,7 +94,8 @@ statement:
     | name EQUALS expression SEMICOLON
     | PRINTF LEFT_ROUND_BRACKET QUOTE NAME QUOTE RIGHT_ROUND_BRACKET SEMICOLON	{std::cout<<"printf function called\n";}
 	| while
-	| if
+	| if_expression
+	| do_while
 	| RETURN name SEMICOLON
     
 variable:
@@ -128,14 +129,31 @@ condition_operand:
 	| LESS_EQUAL
 	| EQUAL_EQUAL
 	| NOT_EQUAL
-	
+
 if:
 	IF LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
 	| IF LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement
-	| IF LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET ELSE LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
-	| IF LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement ELSE statement
-	| IF LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET ELSE statement
-	| IF LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement ELSE LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
+
+else:
+	ELSE statement
+	| ELSE LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
+
+else_if:
+	ELSE if
+
+else_ifs:
+	else_if
+	| else_if else_ifs
+
+if_expression:
+	if else_ifs else
+	| if else_ifs
+	| if else
+
+do_while:
+	DO statement WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET SEMICOLON
+	| DO LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET SEMICOLON
+
 
 %%  //implementations
 

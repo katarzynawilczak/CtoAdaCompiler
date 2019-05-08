@@ -17,8 +17,11 @@ int main() {
 	
 	if (a!=b) {
 		int c = a+3;
-	} else
-		int c = (a-5)*4-2+767;
+	}else if(a==b) printf("equal");
+	else int c = b+3;
+
+	if(a==b) printf("a");
+	else if(a==0) printf("b");
 	
 	//and another here!!!
 	/*block 
@@ -33,6 +36,9 @@ int main() {
 	}
 	
 	while("abc") printf("abc");
+
+	do printf("abc");
+	while(a!=b);
 	
 }
 
