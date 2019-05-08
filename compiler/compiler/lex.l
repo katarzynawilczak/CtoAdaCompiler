@@ -9,6 +9,7 @@ quote			\"
 star			\*
 name        	[a-zA-Z]([0-9]*[a-zA-Z]*)*
 string			{name}*
+number			[0-9]*
 comment_line	\/\/.*
 comment_block	\/{star}[!?.,\*='";:{}()\[\]_\+\-1-9a-zA-Z \n\t\v\f]*{star}\/
 whitespace  	[ \r\t\v\f]
@@ -20,6 +21,10 @@ linefeed    	\n
 ","						{return COMMA;}
 ";"						{return SEMICOLON;}
 "="						{return EQUALS;}
+"+"						{return PLUS;}
+"-"						{return MINUS;}
+"*"						{return MULTIPLY;}
+"/"						{return DIVIDE;}
 {quote}					{return QUOTE;}
 "{"                     {return LEFT_CURLY_BRACKET;}
 "}"                     {return RIGHT_CURLY_BRACKET;}
@@ -47,6 +52,7 @@ linefeed    	\n
 "else"					{return ELSE;}
 {name}                  {return NAME;}
 {string}				{return STRING;}
+{number}				{return NUMBER;}
 {comment_line}			{std::cout<<"Comment line ignored\n";}
 {comment_block}			{std::cout<<"Comment block ignored\n";}
 {whitespace}			

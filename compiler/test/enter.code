@@ -4,9 +4,9 @@
 
 double iloczyn (double a, double second) {
 	double c;
-	/*double c = 2.3;
+	double c = 3;
 	c = a*b;
-	return c;*/
+	return c;
 }
 
 
@@ -14,6 +14,11 @@ int main() {
 	//again 2+4
 	
 	printf("write");
+	
+	if (a!=b) {
+		int c = a+3;
+	} else
+		int c = (a-5)*4-2+767;
 	
 	//and another here!!!
 	/*block 
@@ -23,7 +28,7 @@ int main() {
 		
 	int variable;
 
-	while(a==variable){
+	while(a!=(variable)){
 		int b;
 	}
 	

@@ -20,19 +20,20 @@
 
 %define api.value.type {compiler::SyntaxTree *}
 
-%token NAME LEFT_CURLY_BRACKET RIGHT_CURLY_BRACKET SEMICOLON
-%token LEFT_ROUND_BRACKET RIGHT_ROUND_BRACKET
-%token MAIN
-%token RIGHT_ANGLE_BRACKET LEFT_ANGLE_BRACKET
-%token INCLUDE DOT COMMA
-%token INT_TYPE DOUBLE_TYPE FLOAT_TYPE CHAR_TYPE STRING_TYPE STRING
+%token SEMICOLON DOT COMMA QUOTE				// ; . , "
+%token LEFT_ROUND_BRACKET RIGHT_ROUND_BRACKET	// ()
+%token RIGHT_ANGLE_BRACKET LEFT_ANGLE_BRACKET	// <>
+%token LEFT_CURLY_BRACKET RIGHT_CURLY_BRACKET	// {}
+%token NAME STRING								// variable name, string for printf (all characters)
+%token INCLUDE									// #include
+%token INT_TYPE DOUBLE_TYPE FLOAT_TYPE CHAR_TYPE STRING_TYPE
 %token PRINTF
-%token EQUALS
-%token QUOTE
 %token RETURN
 %token WHILE DO FOR IF ELSE
-%token GREATER_EQUAL LESS_EQUAL EQUAL_EQUAL NOT_EQUAL
+%token GREATER_EQUAL LESS_EQUAL EQUAL_EQUAL NOT_EQUAL EQUALS
 %token AND OR
+%token PLUS MINUS MULTIPLY DIVIDE
+%token NUMBER
 
 
 %start input
@@ -68,6 +69,15 @@ argument:
 	type NAME
 	| %empty
     
+expression:
+	LEFT_ROUND_BRACKET expression RIGHT_ROUND_BRACKET
+	| expression PLUS expression
+	| expression MINUS expression
+	| expression MULTIPLY expression
+	| expression DIVIDE expression
+	| NUMBER
+	| NAME
+    
 type:
 	INT_TYPE
 	| DOUBLE_TYPE
@@ -81,12 +91,15 @@ statements:
 
 statement:
     variable
+    | name EQUALS expression SEMICOLON
     | PRINTF LEFT_ROUND_BRACKET QUOTE NAME QUOTE RIGHT_ROUND_BRACKET SEMICOLON	{std::cout<<"printf function called\n";}
 	| while
+	| if
 	| RETURN name SEMICOLON
     
 variable:
-    type name SEMICOLON		{std::cout<<"new variable\n";}
+    type name SEMICOLON															{}
+    | type name EQUALS expression SEMICOLON
     
 name:
 	NAME
@@ -102,16 +115,27 @@ conditions:
 
 condition:
 	name condition_operand name
-	| name
+	| name condition_operand expression
+	| LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET condition_operand expression
+	| LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET condition_operand LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET
+	| LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET condition_operand name
+	| name condition_operand LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET
+	| LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET
 	| QUOTE name QUOTE
 
 condition_operand:
-	LEFT_CURLY_BRACKET
-	| RIGHT_CURLY_BRACKET
-	| GREATER_EQUAL
+	GREATER_EQUAL
 	| LESS_EQUAL
 	| EQUAL_EQUAL
 	| NOT_EQUAL
+	
+if:
+	IF LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
+	| IF LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement
+	| IF LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET ELSE LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
+	| IF LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement ELSE statement
+	| IF LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET ELSE statement
+	| IF LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement ELSE LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
 
 %%  //implementations
 
