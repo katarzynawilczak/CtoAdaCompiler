@@ -11,7 +11,7 @@ name        	[a-zA-Z]([0-9]*[a-zA-Z]*)*
 string			{name}*
 number			[0-9]*
 comment_line	\/\/.*
-comment_block	\/{star}[!?.,\*='";:{}()\[\]_\+\-1-9a-zA-Z \n\t\v\f]*{star}\/
+comment_block	\/{star}[!?.,\*=<>'";:{}()\[\]_\+\-0-9a-zA-Z \n\t\v\f]*{star}\/
 whitespace  	[ \r\t\v\f]
 linefeed    	\n
 

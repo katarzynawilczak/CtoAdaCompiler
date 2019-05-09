@@ -91,15 +91,18 @@ statements:
 
 statement:
     variable
+	| NAME PLUS PLUS SEMICOLON
+	| NAME MINUS MINUS	SEMICOLON
     | name EQUALS expression SEMICOLON
     | PRINTF LEFT_ROUND_BRACKET QUOTE NAME QUOTE RIGHT_ROUND_BRACKET SEMICOLON	{std::cout<<"printf function called\n";}
 	| while
 	| if_expression
 	| do_while
+	| for
 	| RETURN name SEMICOLON
     
 variable:
-    type name SEMICOLON															{}
+    type name SEMICOLON														
     | type name EQUALS expression SEMICOLON
     
 name:
@@ -153,6 +156,23 @@ if_expression:
 do_while:
 	DO statement WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET SEMICOLON
 	| DO LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET SEMICOLON
+
+for:
+	FOR LEFT_ROUND_BRACKET for_expression RIGHT_ROUND_BRACKET statement
+	| FOR LEFT_ROUND_BRACKET for_expression RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
+
+for_expression:
+	SEMICOLON conditions SEMICOLON
+	| for_statement SEMICOLON conditions SEMICOLON
+	| SEMICOLON conditions SEMICOLON for_statement
+	| for_statement SEMICOLON conditions SEMICOLON for_statement
+
+for_statement:
+	type name
+    | type name EQUALS expression
+	| NAME PLUS PLUS
+	| NAME MINUS MINUS
+    | name EQUALS expression
 
 
 %%  //implementations

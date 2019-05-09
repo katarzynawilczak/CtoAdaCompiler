@@ -40,6 +40,8 @@ int main() {
 	do printf("abc");
 	while(a!=b);
 	
+	//for(int i=0;i<10;i++){ printf("a");}
+	
 }
 
 int sum (int a, int b) {
