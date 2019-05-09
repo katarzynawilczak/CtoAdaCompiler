@@ -59,7 +59,9 @@ function_list:
 	| %empty
 
 function:
-    type NAME LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET  	{std::cout<<"Function detected\n";}     
+    type NAME LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET  	{std::cout<<"Function detected\n";}  
+	| VOID_TYPE NAME LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements_without_return return_nothing RIGHT_CURLY_BRACKET
+  
 argument_list:
 	argument COMMA argument_list
 	| argument
@@ -83,7 +85,6 @@ type:
 	| FLOAT_TYPE
 	| CHAR_TYPE
 	| STRING_TYPE
-	| VOID_TYPE
     
 statements:
     statement statements
@@ -107,10 +108,36 @@ statement:
 	| switch
 	| return_statement
 
+statements_without_return:
+    statement_without_return statements_without_return
+    | %empty
+
+statement_without_return:
+    variable
+	| NAME PLUS PLUS SEMICOLON
+	| NAME MINUS MINUS	SEMICOLON
+    | name EQUALS expression SEMICOLON
+	| name PLUS EQUALS expression SEMICOLON
+	| name MINUS EQUALS expression SEMICOLON
+	| name MULTIPLY EQUALS expression SEMICOLON
+	| name DIVIDE EQUALS expression SEMICOLON 
+    | PRINTF LEFT_ROUND_BRACKET QUOTE NAME QUOTE RIGHT_ROUND_BRACKET SEMICOLON	{std::cout<<"printf function called\n";}
+	| PRINTF LEFT_ROUND_BRACKET QUOTE NUMBER QUOTE RIGHT_ROUND_BRACKET SEMICOLON	{std::cout<<"printf function called\n";}
+	| while
+	| if_expression
+	| do_while
+	| for
+	| switch
+
+
 return_statement:
 	RETURN name SEMICOLON
 	| RETURN NUMBER SEMICOLON
 	| RETURN expression SEMICOLON
+
+return_nothing:
+	 RETURN SEMICOLON
+	| %empty
 	
     
 variable:
@@ -144,6 +171,8 @@ condition_operand:
 	| LESS_EQUAL
 	| EQUAL_EQUAL
 	| NOT_EQUAL
+	| LEFT_ANGLE_BRACKET
+	| RIGHT_ANGLE_BRACKET
 
 if:
 	IF LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
