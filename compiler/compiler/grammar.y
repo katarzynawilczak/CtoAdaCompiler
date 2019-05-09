@@ -94,7 +94,12 @@ statement:
 	| NAME PLUS PLUS SEMICOLON
 	| NAME MINUS MINUS	SEMICOLON
     | name EQUALS expression SEMICOLON
+	| name PLUS EQUALS expression SEMICOLON
+	| name MINUS EQUALS expression SEMICOLON
+	| name MULTIPLY EQUALS expression SEMICOLON
+	| name DIVIDE EQUALS expression SEMICOLON 
     | PRINTF LEFT_ROUND_BRACKET QUOTE NAME QUOTE RIGHT_ROUND_BRACKET SEMICOLON	{std::cout<<"printf function called\n";}
+	| PRINTF LEFT_ROUND_BRACKET QUOTE NUMBER QUOTE RIGHT_ROUND_BRACKET SEMICOLON	{std::cout<<"printf function called\n";}
 	| while
 	| if_expression
 	| do_while

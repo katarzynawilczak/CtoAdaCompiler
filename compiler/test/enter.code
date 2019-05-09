@@ -20,13 +20,14 @@ int main() {
 	}else if(a==b) printf("equal");
 	else int c = b+3;
 
-	if(a==b) printf("a");
+	if(a==b) printf("1");
 	else if(a==0) printf("b");
 	
 	//and another here!!!
 	/*block 
 	{}
 	int a;
+	a+=1;
 		comment*/
 		
 	int variable;
