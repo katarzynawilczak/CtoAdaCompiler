@@ -20,16 +20,16 @@
 
 %define api.value.type {compiler::SyntaxTree *}
 
-%token SEMICOLON DOT COMMA QUOTE				// ; . , "
+%token SEMICOLON DOT COMMA QUOTE COLON			// ; . , " :
 %token LEFT_ROUND_BRACKET RIGHT_ROUND_BRACKET	// ()
 %token RIGHT_ANGLE_BRACKET LEFT_ANGLE_BRACKET	// <>
 %token LEFT_CURLY_BRACKET RIGHT_CURLY_BRACKET	// {}
 %token NAME STRING								// variable name, string for printf (all characters)
 %token INCLUDE									// #include
-%token INT_TYPE DOUBLE_TYPE FLOAT_TYPE CHAR_TYPE STRING_TYPE
+%token INT_TYPE DOUBLE_TYPE FLOAT_TYPE CHAR_TYPE STRING_TYPE VOID_TYPE
 %token PRINTF
 %token RETURN
-%token WHILE DO FOR IF ELSE
+%token WHILE DO FOR IF ELSE SWITCH CASE BREAK DEFAULT
 %token GREATER_EQUAL LESS_EQUAL EQUAL_EQUAL NOT_EQUAL EQUALS
 %token AND OR
 %token PLUS MINUS MULTIPLY DIVIDE
@@ -59,8 +59,7 @@ function_list:
 	| %empty
 
 function:
-    type NAME LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET  	{std::cout<<"Function detected\n";}
-     
+    type NAME LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET  	{std::cout<<"Function detected\n";}     
 argument_list:
 	argument COMMA argument_list
 	| argument
@@ -84,6 +83,7 @@ type:
 	| FLOAT_TYPE
 	| CHAR_TYPE
 	| STRING_TYPE
+	| VOID_TYPE
     
 statements:
     statement statements
@@ -104,7 +104,14 @@ statement:
 	| if_expression
 	| do_while
 	| for
-	| RETURN name SEMICOLON
+	| switch
+	| return_statement
+
+return_statement:
+	RETURN name SEMICOLON
+	| RETURN NUMBER SEMICOLON
+	| RETURN expression SEMICOLON
+	
     
 variable:
     type name SEMICOLON														
@@ -178,6 +185,28 @@ for_statement:
 	| NAME PLUS PLUS
 	| NAME MINUS MINUS
     | name EQUALS expression
+
+switch:
+	SWITCH LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET cases RIGHT_CURLY_BRACKET
+	| SWITCH LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET cases default RIGHT_CURLY_BRACKET
+
+cases:
+	case cases
+	| case
+
+case:
+	CASE value COLON statements break
+
+value:
+	QUOTE name QUOTE
+	| NUMBER
+
+break:
+	BREAK SEMICOLON
+	| %empty
+
+default:
+	DEFAULT COLON statements break
 
 
 %%  //implementations

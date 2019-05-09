@@ -19,6 +19,7 @@ linefeed    	\n
 %%
 "."						{return DOT;}
 ","						{return COMMA;}
+":"						{return COLON;}
 ";"						{return SEMICOLON;}
 "="						{return EQUALS;}
 "+"						{return PLUS;}
@@ -44,12 +45,17 @@ linefeed    	\n
 "char"					{return CHAR_TYPE;}
 "double"				{return DOUBLE_TYPE;}
 "float"					{return FLOAT_TYPE;}
+"void"					{return VOID_TYPE;}
 "return"				{return RETURN;}
 "while"					{return WHILE;}
 "do"					{return DO;}
 "for"					{return FOR;}
 "if"					{return IF;}
 "else"					{return ELSE;}
+"switch"				{return SWITCH;}
+"case"					{return CASE;}
+"break"					{return BREAK;}
+"default"				{return DEFAULT;}
 {name}                  {return NAME;}
 {string}				{return STRING;}
 {number}				{return NUMBER;}
