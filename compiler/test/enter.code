@@ -1,10 +1,13 @@
 
-// #include <math.h>
+#include <math.h>
 #include <stdio.h>
 
 double iloczyn (double a, double second) {
 	double c;
 	double c = 3;
+	bool k = true;
+	if() printf("1");
+	
 	c = a*b;
 	return c;
 }

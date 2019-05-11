@@ -16,7 +16,7 @@ int main() {
         cout << "\nValid input" << endl;
     else
         cout << "Invalid input" << endl;
-    cout << "The input has " << yylineno << " lines\n\n" << endl;
+    //cout << "The input has " << yylineno << " lines\n\n" << endl;
     
     cout << root->toCode() << endl;
     

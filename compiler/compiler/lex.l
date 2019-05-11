@@ -39,12 +39,15 @@ linefeed    	\n
 "!="					{return NOT_EQUAL;}
 "&&"					{return AND;}
 "||"					{return OR;}
+"true"					{return TRUE_STR;}
+"false"					{return FALSE_STR;}
 "#include"				{return INCLUDE;}
 "printf"				{return PRINTF;}
 "int"					{return INT_TYPE;}
 "char"					{return CHAR_TYPE;}
 "double"				{return DOUBLE_TYPE;}
 "float"					{return FLOAT_TYPE;}
+"bool"					{return BOOL_TYPE;}
 "void"					{return VOID_TYPE;}
 "return"				{return RETURN;}
 "while"					{return WHILE;}
