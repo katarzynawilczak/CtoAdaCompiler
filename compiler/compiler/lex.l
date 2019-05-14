@@ -62,8 +62,8 @@ linefeed    	\n
 {name}                  {return NAME;}
 {string}				{return STRING;}
 {number}				{return NUMBER;}
-{comment_line}			{std::cout<<"Comment line ignored\n";}
-{comment_block}			{std::cout<<"Comment block ignored\n";}
+{comment_line}			
+{comment_block}			
 {whitespace}			
-{linefeed}              ++yylineno;
+{linefeed}              //++yylineno;
 %%

@@ -19,9 +19,10 @@ lex:
 run:
 	$(MAKE) all
 	mkdir -p compiled
-	./bin/a.out < test/enter.code #> compiled/output.cpp
-	#g++ compiled/output.cpp -o compiled/output.out
-	#./compiled/output.out
+	./bin/a.out < test/enter.code > compiled/output.adb
+	#gnatmake compiled/output.adb
+	#./compiled/output
+	$(MAKE) clean
 	
 clean:
 	rm -f compiled/output.out bin/a.out compiler/grammar.tab.* compiler/lex.yy.* compiler/lexgram.a

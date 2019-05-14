@@ -44,27 +44,27 @@ input:
 	 libraries function_list													{root.reset(new Input($1, $2));}
 
 libraries:
-	library libraries
+	library libraries															{$$ = new compiler::Libraries($1, $2);}
 	| %empty
 	
 library:
-	INCLUDE LEFT_ANGLE_BRACKET NAME DOT NAME RIGHT_ANGLE_BRACKET				{std::cout<<"\n\n\nLibrary\n";}
+	INCLUDE LEFT_ANGLE_BRACKET name DOT name RIGHT_ANGLE_BRACKET				{$$ = new compiler::Library($3, $5);}
 
 function_list:
-	function function_list
-	| %empty
+	function function_list														{$$ = new compiler::FunctionList($1, $2);}
+	| %empty																	{$$ = nullptr;}
 
 function:
-    type NAME LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET  	{std::cout<<"Function detected\n";}  
-	| VOID_TYPE NAME LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
+    type name LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET  	{$$ = new compiler::Function($1, $2, $4, $7);}  
+	| VOID_TYPE name LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
   
 argument_list:
-	argument COMMA argument_list
-	| argument
+	argument COMMA argument_list												{$$ = new compiler::ArgumentList($1, $3);}
+	| argument																	{$$ = $1;}
 	
 argument:
-	type NAME
-	| %empty
+	type name																	{$$ = new compiler::Argument($1, $2);}
+	| %empty																	{$$ = nullptr;}
     
 expression:
 	LEFT_ROUND_BRACKET expression RIGHT_ROUND_BRACKET
@@ -73,33 +73,33 @@ expression:
 	| expression MULTIPLY expression
 	| expression DIVIDE expression
 	| NUMBER
-	| NAME
+	| name
 	| TRUE_STR
 	| FALSE_STR
     
 type:
-	INT_TYPE
-	| DOUBLE_TYPE
-	| FLOAT_TYPE
-	| CHAR_TYPE
-	| STRING_TYPE
-	| BOOL_TYPE
+	INT_TYPE		{$$ = new compiler::Type(yytext);}
+	| DOUBLE_TYPE	{$$ = new compiler::Type(yytext);}
+	| FLOAT_TYPE	{$$ = new compiler::Type(yytext);}
+	| CHAR_TYPE		{$$ = new compiler::Type(yytext);}
+	| STRING_TYPE	{$$ = new compiler::Type(yytext);}
+	| BOOL_TYPE		{$$ = new compiler::Type(yytext);}
     
 statements:
-    statement statements
-    | %empty
+    statement statements													{}
+    | %empty																{$$ = nullptr;}
 
 statement:
 	variable
-	| NAME PLUS PLUS SEMICOLON
-	| NAME MINUS MINUS	SEMICOLON
-    | NAME EQUALS expression SEMICOLON
-	| NAME PLUS EQUALS expression SEMICOLON
-	| NAME MINUS EQUALS expression SEMICOLON
-	| NAME MULTIPLY EQUALS expression SEMICOLON
-	| NAME DIVIDE EQUALS expression SEMICOLON 
-    | PRINTF LEFT_ROUND_BRACKET QUOTE NAME QUOTE RIGHT_ROUND_BRACKET SEMICOLON	{std::cout<<"printf function called\n";}
-	| PRINTF LEFT_ROUND_BRACKET QUOTE NUMBER QUOTE RIGHT_ROUND_BRACKET SEMICOLON	{std::cout<<"printf function called\n";}
+	| name PLUS PLUS SEMICOLON
+	| name MINUS MINUS	SEMICOLON
+    | name EQUALS expression SEMICOLON
+	| name PLUS EQUALS expression SEMICOLON
+	| name MINUS EQUALS expression SEMICOLON
+	| name MULTIPLY EQUALS expression SEMICOLON
+	| name DIVIDE EQUALS expression SEMICOLON 
+    | PRINTF LEFT_ROUND_BRACKET QUOTE name QUOTE RIGHT_ROUND_BRACKET SEMICOLON	{}
+	| PRINTF LEFT_ROUND_BRACKET QUOTE NUMBER QUOTE RIGHT_ROUND_BRACKET SEMICOLON	{}
 	| while
 	| if_expression
 	| do_while
@@ -108,14 +108,17 @@ statement:
 	| return_statement
 
 return_statement:
-	RETURN NAME SEMICOLON
+	RETURN name SEMICOLON
 	| RETURN NUMBER SEMICOLON
 	| RETURN expression SEMICOLON
 	| RETURN SEMICOLON
     
 variable:
-    type NAME SEMICOLON														
-    | type NAME EQUALS expression SEMICOLON
+    type name SEMICOLON														{$$ = new compiler::Variable($1, $2);}
+    | type name EQUALS expression SEMICOLON									{$$ = new compiler::Variable($1, $2, $4);}
+    
+name:
+	NAME																	{$$ = new compiler::Name(yytext);}
     
 while:
 	WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
@@ -133,7 +136,6 @@ condition:
 	| LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET condition_operand expression
 	| LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET condition_operand LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET
 	| NAME condition_operand LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET
-	| LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET
 	| QUOTE NAME QUOTE
 
 condition_operand:
@@ -171,7 +173,7 @@ for_expression:
 	| for_statement SEMICOLON conditions SEMICOLON for_step
 
 for_statement:
-	type NAME
+	NAME
     | type NAME EQUALS expression
     | for_step
     
@@ -179,6 +181,10 @@ for_step:
 	| NAME PLUS PLUS
 	| NAME MINUS MINUS
     | NAME EQUALS expression
+    | NAME PLUS EQUALS expression
+    | NAME MINUS EQUALS expression
+    | NAME MULTIPLY EQUALS expression
+    | NAME DIVIDE EQUALS expression
 
 switch:
 	SWITCH LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET cases RIGHT_CURLY_BRACKET
