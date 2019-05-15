@@ -131,7 +131,7 @@ conditions:
 	| condition
 
 condition:
-	| expression
+	expression
 	| NAME condition_operand expression
 	| LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET condition_operand expression
 	| LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET condition_operand LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET
@@ -155,7 +155,7 @@ else:
 	| ELSE LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
 
 if_expression:
-	| if else
+	if else
 	| if
 
 do_while:
@@ -178,7 +178,7 @@ for_statement:
     | for_step
     
 for_step:
-	| NAME PLUS PLUS
+	NAME PLUS PLUS
 	| NAME MINUS MINUS
     | NAME EQUALS expression
     | NAME PLUS EQUALS expression

@@ -5,13 +5,13 @@ begin
 c : Float;
 end iloczyn;
 
-procedure Output is
-begin
-end main;
-
 function sum(a : Integer, b : Integer) is
 begin
 c : Integer;
 end sum;
+
+procedure Output is
+begin
+end main;
 
 
