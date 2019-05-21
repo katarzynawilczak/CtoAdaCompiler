@@ -9,7 +9,7 @@ all:
 	mv a.out bin
 
 grammar:
-	bison -d compiler/grammar.y
+	bison -v -d compiler/grammar.y
 	mv grammar.tab.* compiler
 
 lex:
@@ -19,7 +19,7 @@ lex:
 run:
 	$(MAKE) all
 	mkdir -p compiled
-	./bin/a.out < test/enter.code > compiled/output.adb
+	./bin/a.out < test/enter.c > compiled/output.adb
 	#gnatmake compiled/output.adb
 	#./compiled/output
 	$(MAKE) clean

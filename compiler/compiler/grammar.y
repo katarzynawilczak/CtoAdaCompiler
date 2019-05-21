@@ -24,7 +24,7 @@
 %token LEFT_ROUND_BRACKET RIGHT_ROUND_BRACKET	// ()
 %token RIGHT_ANGLE_BRACKET LEFT_ANGLE_BRACKET	// <>
 %token LEFT_CURLY_BRACKET RIGHT_CURLY_BRACKET	// {}
-%token NAME STRING								// variable name, string for printf (all characters)
+%token NAME										// variable name, string for printf (all characters)
 %token INCLUDE									// #include
 %token INT_TYPE DOUBLE_TYPE FLOAT_TYPE CHAR_TYPE STRING_TYPE BOOL_TYPE VOID_TYPE
 %token PRINTF
@@ -101,7 +101,7 @@ statement:
     | PRINTF LEFT_ROUND_BRACKET QUOTE name QUOTE RIGHT_ROUND_BRACKET SEMICOLON	{}
 	| PRINTF LEFT_ROUND_BRACKET QUOTE NUMBER QUOTE RIGHT_ROUND_BRACKET SEMICOLON	{}
 	| while
-	| if_expression
+	| if
 	| do_while
 	| for
 	| switch
@@ -119,10 +119,13 @@ variable:
     
 name:
 	NAME																	{$$ = new compiler::Name(yytext);}
+	
+statement_with_or_without_brackets:
+	LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
+	| statement
     
 while:
-	WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
-	| WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement
+	WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement_with_or_without_brackets
 	
 conditions:
 	LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET
@@ -147,24 +150,17 @@ condition_operand:
 	| RIGHT_ANGLE_BRACKET
 
 if:
-	IF LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
-	| IF LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement
+	IF LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement_with_or_without_brackets else
 
 else:
-	ELSE statement
-	| ELSE LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
-
-if_expression:
-	if else
-	| if
+	ELSE statement_with_or_without_brackets
+	| %empty
 
 do_while:
-	DO statement WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET SEMICOLON
-	| DO LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET SEMICOLON
+	DO statement_with_or_without_brackets WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET SEMICOLON
 
 for:
-	FOR LEFT_ROUND_BRACKET for_expression RIGHT_ROUND_BRACKET statement
-	| FOR LEFT_ROUND_BRACKET for_expression RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
+	FOR LEFT_ROUND_BRACKET for_expression RIGHT_ROUND_BRACKET statement_with_or_without_brackets
 
 for_expression:
 	SEMICOLON conditions SEMICOLON

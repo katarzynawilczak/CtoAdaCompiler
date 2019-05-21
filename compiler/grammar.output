@@ -1,0 +1,2948 @@
+State 61 conflicts: 1 shift/reduce
+State 65 conflicts: 1 shift/reduce
+State 121 conflicts: 4 shift/reduce
+State 122 conflicts: 4 shift/reduce
+State 123 conflicts: 4 shift/reduce
+State 124 conflicts: 4 shift/reduce
+State 126 conflicts: 1 shift/reduce
+State 127 conflicts: 1 shift/reduce
+State 168 conflicts: 2 shift/reduce
+State 169 conflicts: 2 shift/reduce
+State 182 conflicts: 1 shift/reduce
+State 192 conflicts: 1 shift/reduce
+State 222 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: input $end
+
+    1 input: libraries function_list
+
+    2 libraries: library libraries
+    3          | %empty
+
+    4 library: INCLUDE LEFT_ANGLE_BRACKET name DOT name RIGHT_ANGLE_BRACKET
+
+    5 function_list: function function_list
+    6              | %empty
+
+    7 function: type name LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
+    8         | VOID_TYPE name LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
+
+    9 argument_list: argument COMMA argument_list
+   10              | argument
+
+   11 argument: type name
+   12         | %empty
+
+   13 expression: LEFT_ROUND_BRACKET expression RIGHT_ROUND_BRACKET
+   14           | expression PLUS expression
+   15           | expression MINUS expression
+   16           | expression MULTIPLY expression
+   17           | expression DIVIDE expression
+   18           | NUMBER
+   19           | name
+   20           | TRUE_STR
+   21           | FALSE_STR
+
+   22 type: INT_TYPE
+   23     | DOUBLE_TYPE
+   24     | FLOAT_TYPE
+   25     | CHAR_TYPE
+   26     | STRING_TYPE
+   27     | BOOL_TYPE
+
+   28 statements: statement statements
+   29           | %empty
+
+   30 statement: variable
+   31          | name PLUS PLUS SEMICOLON
+   32          | name MINUS MINUS SEMICOLON
+   33          | name EQUALS expression SEMICOLON
+   34          | name PLUS EQUALS expression SEMICOLON
+   35          | name MINUS EQUALS expression SEMICOLON
+   36          | name MULTIPLY EQUALS expression SEMICOLON
+   37          | name DIVIDE EQUALS expression SEMICOLON
+   38          | PRINTF LEFT_ROUND_BRACKET QUOTE name QUOTE RIGHT_ROUND_BRACKET SEMICOLON
+   39          | PRINTF LEFT_ROUND_BRACKET QUOTE NUMBER QUOTE RIGHT_ROUND_BRACKET SEMICOLON
+   40          | while
+   41          | if
+   42          | do_while
+   43          | for
+   44          | switch
+   45          | return_statement
+
+   46 return_statement: RETURN name SEMICOLON
+   47                 | RETURN NUMBER SEMICOLON
+   48                 | RETURN expression SEMICOLON
+   49                 | RETURN SEMICOLON
+
+   50 variable: type name SEMICOLON
+   51         | type name EQUALS expression SEMICOLON
+
+   52 name: NAME
+
+   53 statement_with_or_without_brackets: LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
+   54                                   | statement
+
+   55 while: WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement_with_or_without_brackets
+
+   56 conditions: LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET
+   57           | conditions AND conditions
+   58           | conditions OR conditions
+   59           | condition
+
+   60 condition: expression
+   61          | NAME condition_operand expression
+   62          | LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET condition_operand expression
+   63          | LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET condition_operand LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET
+   64          | NAME condition_operand LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET
+   65          | QUOTE NAME QUOTE
+
+   66 condition_operand: GREATER_EQUAL
+   67                  | LESS_EQUAL
+   68                  | EQUAL_EQUAL
+   69                  | NOT_EQUAL
+   70                  | LEFT_ANGLE_BRACKET
+   71                  | RIGHT_ANGLE_BRACKET
+
+   72 if: IF LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement_with_or_without_brackets else
+
+   73 else: ELSE statement_with_or_without_brackets
+   74     | %empty
+
+   75 do_while: DO statement_with_or_without_brackets WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET SEMICOLON
+
+   76 for: FOR LEFT_ROUND_BRACKET for_expression RIGHT_ROUND_BRACKET statement_with_or_without_brackets
+
+   77 for_expression: SEMICOLON conditions SEMICOLON
+   78               | for_statement SEMICOLON conditions SEMICOLON
+   79               | SEMICOLON conditions SEMICOLON for_step
+   80               | for_statement SEMICOLON conditions SEMICOLON for_step
+
+   81 for_statement: NAME
+   82              | type NAME EQUALS expression
+   83              | for_step
+
+   84 for_step: NAME PLUS PLUS
+   85         | NAME MINUS MINUS
+   86         | NAME EQUALS expression
+   87         | NAME PLUS EQUALS expression
+   88         | NAME MINUS EQUALS expression
+   89         | NAME MULTIPLY EQUALS expression
+   90         | NAME DIVIDE EQUALS expression
+
+   91 switch: SWITCH LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET cases RIGHT_CURLY_BRACKET
+   92       | SWITCH LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET cases default RIGHT_CURLY_BRACKET
+
+   93 cases: case cases
+   94      | case
+
+   95 case: CASE value COLON statements break
+
+   96 value: QUOTE NAME QUOTE
+   97      | NUMBER
+
+   98 break: BREAK SEMICOLON
+   99      | %empty
+
+  100 default: DEFAULT COLON statements break
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+SEMICOLON (258) 31 32 33 34 35 36 37 38 39 46 47 48 49 50 51 75 77
+    78 79 80 98
+DOT (259) 4
+COMMA (260) 9
+QUOTE (261) 38 39 65 96
+COLON (262) 95 100
+LEFT_ROUND_BRACKET (263) 7 8 13 38 39 55 56 62 63 64 72 75 76 91 92
+RIGHT_ROUND_BRACKET (264) 7 8 13 38 39 55 56 62 63 64 72 75 76 91 92
+RIGHT_ANGLE_BRACKET (265) 4 71
+LEFT_ANGLE_BRACKET (266) 4 70
+LEFT_CURLY_BRACKET (267) 7 8 53 91 92
+RIGHT_CURLY_BRACKET (268) 7 8 53 91 92
+NAME (269) 52 61 62 63 64 65 81 82 84 85 86 87 88 89 90 91 92 96
+INCLUDE (270) 4
+INT_TYPE (271) 22
+DOUBLE_TYPE (272) 23
+FLOAT_TYPE (273) 24
+CHAR_TYPE (274) 25
+STRING_TYPE (275) 26
+BOOL_TYPE (276) 27
+VOID_TYPE (277) 8
+PRINTF (278) 38 39
+RETURN (279) 46 47 48 49
+WHILE (280) 55 75
+DO (281) 75
+FOR (282) 76
+IF (283) 72
+ELSE (284) 73
+SWITCH (285) 91 92
+CASE (286) 95
+BREAK (287) 98
+DEFAULT (288) 100
+GREATER_EQUAL (289) 66
+LESS_EQUAL (290) 67
+EQUAL_EQUAL (291) 68
+NOT_EQUAL (292) 69
+EQUALS (293) 33 34 35 36 37 51 82 86 87 88 89 90
+AND (294) 57
+OR (295) 58
+PLUS (296) 14 31 34 84 87
+MINUS (297) 15 32 35 85 88
+MULTIPLY (298) 16 36 89
+DIVIDE (299) 17 37 90
+NUMBER (300) 18 39 47 97
+TRUE_STR (301) 20
+FALSE_STR (302) 21
+
+
+Nonterminals, with rules where they appear
+
+$accept (48)
+    on left: 0
+input (49)
+    on left: 1, on right: 0
+libraries (50)
+    on left: 2 3, on right: 1 2
+library (51)
+    on left: 4, on right: 2
+function_list (52)
+    on left: 5 6, on right: 1 5
+function (53)
+    on left: 7 8, on right: 5
+argument_list (54)
+    on left: 9 10, on right: 7 8 9
+argument (55)
+    on left: 11 12, on right: 9 10
+expression (56)
+    on left: 13 14 15 16 17 18 19 20 21, on right: 13 14 15 16 17 33
+    34 35 36 37 48 51 60 61 62 82 86 87 88 89 90
+type (57)
+    on left: 22 23 24 25 26 27, on right: 7 11 50 51 82
+statements (58)
+    on left: 28 29, on right: 7 8 28 53 95 100
+statement (59)
+    on left: 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45, on right:
+    28 54
+return_statement (60)
+    on left: 46 47 48 49, on right: 45
+variable (61)
+    on left: 50 51, on right: 30
+name (62)
+    on left: 52, on right: 4 7 8 11 19 31 32 33 34 35 36 37 38 46 50
+    51
+statement_with_or_without_brackets (63)
+    on left: 53 54, on right: 55 72 73 75 76
+while (64)
+    on left: 55, on right: 40
+conditions (65)
+    on left: 56 57 58 59, on right: 55 56 57 58 72 75 77 78 79 80
+condition (66)
+    on left: 60 61 62 63 64 65, on right: 59
+condition_operand (67)
+    on left: 66 67 68 69 70 71, on right: 61 62 63 64
+if (68)
+    on left: 72, on right: 41
+else (69)
+    on left: 73 74, on right: 72
+do_while (70)
+    on left: 75, on right: 42
+for (71)
+    on left: 76, on right: 43
+for_expression (72)
+    on left: 77 78 79 80, on right: 76
+for_statement (73)
+    on left: 81 82 83, on right: 78 80
+for_step (74)
+    on left: 84 85 86 87 88 89 90, on right: 79 80 83
+switch (75)
+    on left: 91 92, on right: 44
+cases (76)
+    on left: 93 94, on right: 91 92 93
+case (77)
+    on left: 95, on right: 93 94
+value (78)
+    on left: 96 97, on right: 95
+break (79)
+    on left: 98 99, on right: 95 100
+default (80)
+    on left: 100, on right: 92
+
+
+State 0
+
+    0 $accept: . input $end
+
+    INCLUDE  shift, and go to state 1
+
+    $default  reduce using rule 3 (libraries)
+
+    input      go to state 2
+    libraries  go to state 3
+    library    go to state 4
+
+
+State 1
+
+    4 library: INCLUDE . LEFT_ANGLE_BRACKET name DOT name RIGHT_ANGLE_BRACKET
+
+    LEFT_ANGLE_BRACKET  shift, and go to state 5
+
+
+State 2
+
+    0 $accept: input . $end
+
+    $end  shift, and go to state 6
+
+
+State 3
+
+    1 input: libraries . function_list
+
+    INT_TYPE     shift, and go to state 7
+    DOUBLE_TYPE  shift, and go to state 8
+    FLOAT_TYPE   shift, and go to state 9
+    CHAR_TYPE    shift, and go to state 10
+    STRING_TYPE  shift, and go to state 11
+    BOOL_TYPE    shift, and go to state 12
+    VOID_TYPE    shift, and go to state 13
+
+    $default  reduce using rule 6 (function_list)
+
+    function_list  go to state 14
+    function       go to state 15
+    type           go to state 16
+
+
+State 4
+
+    2 libraries: library . libraries
+
+    INCLUDE  shift, and go to state 1
+
+    $default  reduce using rule 3 (libraries)
+
+    libraries  go to state 17
+    library    go to state 4
+
+
+State 5
+
+    4 library: INCLUDE LEFT_ANGLE_BRACKET . name DOT name RIGHT_ANGLE_BRACKET
+
+    NAME  shift, and go to state 18
+
+    name  go to state 19
+
+
+State 6
+
+    0 $accept: input $end .
+
+    $default  accept
+
+
+State 7
+
+   22 type: INT_TYPE .
+
+    $default  reduce using rule 22 (type)
+
+
+State 8
+
+   23 type: DOUBLE_TYPE .
+
+    $default  reduce using rule 23 (type)
+
+
+State 9
+
+   24 type: FLOAT_TYPE .
+
+    $default  reduce using rule 24 (type)
+
+
+State 10
+
+   25 type: CHAR_TYPE .
+
+    $default  reduce using rule 25 (type)
+
+
+State 11
+
+   26 type: STRING_TYPE .
+
+    $default  reduce using rule 26 (type)
+
+
+State 12
+
+   27 type: BOOL_TYPE .
+
+    $default  reduce using rule 27 (type)
+
+
+State 13
+
+    8 function: VOID_TYPE . name LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
+
+    NAME  shift, and go to state 18
+
+    name  go to state 20
+
+
+State 14
+
+    1 input: libraries function_list .
+
+    $default  reduce using rule 1 (input)
+
+
+State 15
+
+    5 function_list: function . function_list
+
+    INT_TYPE     shift, and go to state 7
+    DOUBLE_TYPE  shift, and go to state 8
+    FLOAT_TYPE   shift, and go to state 9
+    CHAR_TYPE    shift, and go to state 10
+    STRING_TYPE  shift, and go to state 11
+    BOOL_TYPE    shift, and go to state 12
+    VOID_TYPE    shift, and go to state 13
+
+    $default  reduce using rule 6 (function_list)
+
+    function_list  go to state 21
+    function       go to state 15
+    type           go to state 16
+
+
+State 16
+
+    7 function: type . name LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
+
+    NAME  shift, and go to state 18
+
+    name  go to state 22
+
+
+State 17
+
+    2 libraries: library libraries .
+
+    $default  reduce using rule 2 (libraries)
+
+
+State 18
+
+   52 name: NAME .
+
+    $default  reduce using rule 52 (name)
+
+
+State 19
+
+    4 library: INCLUDE LEFT_ANGLE_BRACKET name . DOT name RIGHT_ANGLE_BRACKET
+
+    DOT  shift, and go to state 23
+
+
+State 20
+
+    8 function: VOID_TYPE name . LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
+
+    LEFT_ROUND_BRACKET  shift, and go to state 24
+
+
+State 21
+
+    5 function_list: function function_list .
+
+    $default  reduce using rule 5 (function_list)
+
+
+State 22
+
+    7 function: type name . LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
+
+    LEFT_ROUND_BRACKET  shift, and go to state 25
+
+
+State 23
+
+    4 library: INCLUDE LEFT_ANGLE_BRACKET name DOT . name RIGHT_ANGLE_BRACKET
+
+    NAME  shift, and go to state 18
+
+    name  go to state 26
+
+
+State 24
+
+    8 function: VOID_TYPE name LEFT_ROUND_BRACKET . argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
+
+    INT_TYPE     shift, and go to state 7
+    DOUBLE_TYPE  shift, and go to state 8
+    FLOAT_TYPE   shift, and go to state 9
+    CHAR_TYPE    shift, and go to state 10
+    STRING_TYPE  shift, and go to state 11
+    BOOL_TYPE    shift, and go to state 12
+
+    $default  reduce using rule 12 (argument)
+
+    argument_list  go to state 27
+    argument       go to state 28
+    type           go to state 29
+
+
+State 25
+
+    7 function: type name LEFT_ROUND_BRACKET . argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
+
+    INT_TYPE     shift, and go to state 7
+    DOUBLE_TYPE  shift, and go to state 8
+    FLOAT_TYPE   shift, and go to state 9
+    CHAR_TYPE    shift, and go to state 10
+    STRING_TYPE  shift, and go to state 11
+    BOOL_TYPE    shift, and go to state 12
+
+    $default  reduce using rule 12 (argument)
+
+    argument_list  go to state 30
+    argument       go to state 28
+    type           go to state 29
+
+
+State 26
+
+    4 library: INCLUDE LEFT_ANGLE_BRACKET name DOT name . RIGHT_ANGLE_BRACKET
+
+    RIGHT_ANGLE_BRACKET  shift, and go to state 31
+
+
+State 27
+
+    8 function: VOID_TYPE name LEFT_ROUND_BRACKET argument_list . RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
+
+    RIGHT_ROUND_BRACKET  shift, and go to state 32
+
+
+State 28
+
+    9 argument_list: argument . COMMA argument_list
+   10              | argument .
+
+    COMMA  shift, and go to state 33
+
+    $default  reduce using rule 10 (argument_list)
+
+
+State 29
+
+   11 argument: type . name
+
+    NAME  shift, and go to state 18
+
+    name  go to state 34
+
+
+State 30
+
+    7 function: type name LEFT_ROUND_BRACKET argument_list . RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
+
+    RIGHT_ROUND_BRACKET  shift, and go to state 35
+
+
+State 31
+
+    4 library: INCLUDE LEFT_ANGLE_BRACKET name DOT name RIGHT_ANGLE_BRACKET .
+
+    $default  reduce using rule 4 (library)
+
+
+State 32
+
+    8 function: VOID_TYPE name LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET . LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
+
+    LEFT_CURLY_BRACKET  shift, and go to state 36
+
+
+State 33
+
+    9 argument_list: argument COMMA . argument_list
+
+    INT_TYPE     shift, and go to state 7
+    DOUBLE_TYPE  shift, and go to state 8
+    FLOAT_TYPE   shift, and go to state 9
+    CHAR_TYPE    shift, and go to state 10
+    STRING_TYPE  shift, and go to state 11
+    BOOL_TYPE    shift, and go to state 12
+
+    $default  reduce using rule 12 (argument)
+
+    argument_list  go to state 37
+    argument       go to state 28
+    type           go to state 29
+
+
+State 34
+
+   11 argument: type name .
+
+    $default  reduce using rule 11 (argument)
+
+
+State 35
+
+    7 function: type name LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET . LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
+
+    LEFT_CURLY_BRACKET  shift, and go to state 38
+
+
+State 36
+
+    8 function: VOID_TYPE name LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET . statements RIGHT_CURLY_BRACKET
+
+    NAME         shift, and go to state 18
+    INT_TYPE     shift, and go to state 7
+    DOUBLE_TYPE  shift, and go to state 8
+    FLOAT_TYPE   shift, and go to state 9
+    CHAR_TYPE    shift, and go to state 10
+    STRING_TYPE  shift, and go to state 11
+    BOOL_TYPE    shift, and go to state 12
+    PRINTF       shift, and go to state 39
+    RETURN       shift, and go to state 40
+    WHILE        shift, and go to state 41
+    DO           shift, and go to state 42
+    FOR          shift, and go to state 43
+    IF           shift, and go to state 44
+    SWITCH       shift, and go to state 45
+
+    $default  reduce using rule 29 (statements)
+
+    type              go to state 46
+    statements        go to state 47
+    statement         go to state 48
+    return_statement  go to state 49
+    variable          go to state 50
+    name              go to state 51
+    while             go to state 52
+    if                go to state 53
+    do_while          go to state 54
+    for               go to state 55
+    switch            go to state 56
+
+
+State 37
+
+    9 argument_list: argument COMMA argument_list .
+
+    $default  reduce using rule 9 (argument_list)
+
+
+State 38
+
+    7 function: type name LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET . statements RIGHT_CURLY_BRACKET
+
+    NAME         shift, and go to state 18
+    INT_TYPE     shift, and go to state 7
+    DOUBLE_TYPE  shift, and go to state 8
+    FLOAT_TYPE   shift, and go to state 9
+    CHAR_TYPE    shift, and go to state 10
+    STRING_TYPE  shift, and go to state 11
+    BOOL_TYPE    shift, and go to state 12
+    PRINTF       shift, and go to state 39
+    RETURN       shift, and go to state 40
+    WHILE        shift, and go to state 41
+    DO           shift, and go to state 42
+    FOR          shift, and go to state 43
+    IF           shift, and go to state 44
+    SWITCH       shift, and go to state 45
+
+    $default  reduce using rule 29 (statements)
+
+    type              go to state 46
+    statements        go to state 57
+    statement         go to state 48
+    return_statement  go to state 49
+    variable          go to state 50
+    name              go to state 51
+    while             go to state 52
+    if                go to state 53
+    do_while          go to state 54
+    for               go to state 55
+    switch            go to state 56
+
+
+State 39
+
+   38 statement: PRINTF . LEFT_ROUND_BRACKET QUOTE name QUOTE RIGHT_ROUND_BRACKET SEMICOLON
+   39          | PRINTF . LEFT_ROUND_BRACKET QUOTE NUMBER QUOTE RIGHT_ROUND_BRACKET SEMICOLON
+
+    LEFT_ROUND_BRACKET  shift, and go to state 58
+
+
+State 40
+
+   46 return_statement: RETURN . name SEMICOLON
+   47                 | RETURN . NUMBER SEMICOLON
+   48                 | RETURN . expression SEMICOLON
+   49                 | RETURN . SEMICOLON
+
+    SEMICOLON           shift, and go to state 59
+    LEFT_ROUND_BRACKET  shift, and go to state 60
+    NAME                shift, and go to state 18
+    NUMBER              shift, and go to state 61
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 64
+    name        go to state 65
+
+
+State 41
+
+   55 while: WHILE . LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement_with_or_without_brackets
+
+    LEFT_ROUND_BRACKET  shift, and go to state 66
+
+
+State 42
+
+   75 do_while: DO . statement_with_or_without_brackets WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET SEMICOLON
+
+    LEFT_CURLY_BRACKET  shift, and go to state 67
+    NAME                shift, and go to state 18
+    INT_TYPE            shift, and go to state 7
+    DOUBLE_TYPE         shift, and go to state 8
+    FLOAT_TYPE          shift, and go to state 9
+    CHAR_TYPE           shift, and go to state 10
+    STRING_TYPE         shift, and go to state 11
+    BOOL_TYPE           shift, and go to state 12
+    PRINTF              shift, and go to state 39
+    RETURN              shift, and go to state 40
+    WHILE               shift, and go to state 41
+    DO                  shift, and go to state 42
+    FOR                 shift, and go to state 43
+    IF                  shift, and go to state 44
+    SWITCH              shift, and go to state 45
+
+    type                                go to state 46
+    statement                           go to state 68
+    return_statement                    go to state 49
+    variable                            go to state 50
+    name                                go to state 51
+    statement_with_or_without_brackets  go to state 69
+    while                               go to state 52
+    if                                  go to state 53
+    do_while                            go to state 54
+    for                                 go to state 55
+    switch                              go to state 56
+
+
+State 43
+
+   76 for: FOR . LEFT_ROUND_BRACKET for_expression RIGHT_ROUND_BRACKET statement_with_or_without_brackets
+
+    LEFT_ROUND_BRACKET  shift, and go to state 70
+
+
+State 44
+
+   72 if: IF . LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement_with_or_without_brackets else
+
+    LEFT_ROUND_BRACKET  shift, and go to state 71
+
+
+State 45
+
+   91 switch: SWITCH . LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET cases RIGHT_CURLY_BRACKET
+   92       | SWITCH . LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET cases default RIGHT_CURLY_BRACKET
+
+    LEFT_ROUND_BRACKET  shift, and go to state 72
+
+
+State 46
+
+   50 variable: type . name SEMICOLON
+   51         | type . name EQUALS expression SEMICOLON
+
+    NAME  shift, and go to state 18
+
+    name  go to state 73
+
+
+State 47
+
+    8 function: VOID_TYPE name LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements . RIGHT_CURLY_BRACKET
+
+    RIGHT_CURLY_BRACKET  shift, and go to state 74
+
+
+State 48
+
+   28 statements: statement . statements
+
+    NAME         shift, and go to state 18
+    INT_TYPE     shift, and go to state 7
+    DOUBLE_TYPE  shift, and go to state 8
+    FLOAT_TYPE   shift, and go to state 9
+    CHAR_TYPE    shift, and go to state 10
+    STRING_TYPE  shift, and go to state 11
+    BOOL_TYPE    shift, and go to state 12
+    PRINTF       shift, and go to state 39
+    RETURN       shift, and go to state 40
+    WHILE        shift, and go to state 41
+    DO           shift, and go to state 42
+    FOR          shift, and go to state 43
+    IF           shift, and go to state 44
+    SWITCH       shift, and go to state 45
+
+    $default  reduce using rule 29 (statements)
+
+    type              go to state 46
+    statements        go to state 75
+    statement         go to state 48
+    return_statement  go to state 49
+    variable          go to state 50
+    name              go to state 51
+    while             go to state 52
+    if                go to state 53
+    do_while          go to state 54
+    for               go to state 55
+    switch            go to state 56
+
+
+State 49
+
+   45 statement: return_statement .
+
+    $default  reduce using rule 45 (statement)
+
+
+State 50
+
+   30 statement: variable .
+
+    $default  reduce using rule 30 (statement)
+
+
+State 51
+
+   31 statement: name . PLUS PLUS SEMICOLON
+   32          | name . MINUS MINUS SEMICOLON
+   33          | name . EQUALS expression SEMICOLON
+   34          | name . PLUS EQUALS expression SEMICOLON
+   35          | name . MINUS EQUALS expression SEMICOLON
+   36          | name . MULTIPLY EQUALS expression SEMICOLON
+   37          | name . DIVIDE EQUALS expression SEMICOLON
+
+    EQUALS    shift, and go to state 76
+    PLUS      shift, and go to state 77
+    MINUS     shift, and go to state 78
+    MULTIPLY  shift, and go to state 79
+    DIVIDE    shift, and go to state 80
+
+
+State 52
+
+   40 statement: while .
+
+    $default  reduce using rule 40 (statement)
+
+
+State 53
+
+   41 statement: if .
+
+    $default  reduce using rule 41 (statement)
+
+
+State 54
+
+   42 statement: do_while .
+
+    $default  reduce using rule 42 (statement)
+
+
+State 55
+
+   43 statement: for .
+
+    $default  reduce using rule 43 (statement)
+
+
+State 56
+
+   44 statement: switch .
+
+    $default  reduce using rule 44 (statement)
+
+
+State 57
+
+    7 function: type name LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements . RIGHT_CURLY_BRACKET
+
+    RIGHT_CURLY_BRACKET  shift, and go to state 81
+
+
+State 58
+
+   38 statement: PRINTF LEFT_ROUND_BRACKET . QUOTE name QUOTE RIGHT_ROUND_BRACKET SEMICOLON
+   39          | PRINTF LEFT_ROUND_BRACKET . QUOTE NUMBER QUOTE RIGHT_ROUND_BRACKET SEMICOLON
+
+    QUOTE  shift, and go to state 82
+
+
+State 59
+
+   49 return_statement: RETURN SEMICOLON .
+
+    $default  reduce using rule 49 (return_statement)
+
+
+State 60
+
+   13 expression: LEFT_ROUND_BRACKET . expression RIGHT_ROUND_BRACKET
+
+    LEFT_ROUND_BRACKET  shift, and go to state 60
+    NAME                shift, and go to state 18
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 84
+    name        go to state 85
+
+
+State 61
+
+   18 expression: NUMBER .
+   47 return_statement: RETURN NUMBER . SEMICOLON
+
+    SEMICOLON  shift, and go to state 86
+
+    SEMICOLON  [reduce using rule 18 (expression)]
+    $default   reduce using rule 18 (expression)
+
+
+State 62
+
+   20 expression: TRUE_STR .
+
+    $default  reduce using rule 20 (expression)
+
+
+State 63
+
+   21 expression: FALSE_STR .
+
+    $default  reduce using rule 21 (expression)
+
+
+State 64
+
+   14 expression: expression . PLUS expression
+   15           | expression . MINUS expression
+   16           | expression . MULTIPLY expression
+   17           | expression . DIVIDE expression
+   48 return_statement: RETURN expression . SEMICOLON
+
+    SEMICOLON  shift, and go to state 87
+    PLUS       shift, and go to state 88
+    MINUS      shift, and go to state 89
+    MULTIPLY   shift, and go to state 90
+    DIVIDE     shift, and go to state 91
+
+
+State 65
+
+   19 expression: name .
+   46 return_statement: RETURN name . SEMICOLON
+
+    SEMICOLON  shift, and go to state 92
+
+    SEMICOLON  [reduce using rule 19 (expression)]
+    $default   reduce using rule 19 (expression)
+
+
+State 66
+
+   55 while: WHILE LEFT_ROUND_BRACKET . conditions RIGHT_ROUND_BRACKET statement_with_or_without_brackets
+
+    QUOTE               shift, and go to state 93
+    LEFT_ROUND_BRACKET  shift, and go to state 94
+    NAME                shift, and go to state 95
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 96
+    name        go to state 85
+    conditions  go to state 97
+    condition   go to state 98
+
+
+State 67
+
+   53 statement_with_or_without_brackets: LEFT_CURLY_BRACKET . statements RIGHT_CURLY_BRACKET
+
+    NAME         shift, and go to state 18
+    INT_TYPE     shift, and go to state 7
+    DOUBLE_TYPE  shift, and go to state 8
+    FLOAT_TYPE   shift, and go to state 9
+    CHAR_TYPE    shift, and go to state 10
+    STRING_TYPE  shift, and go to state 11
+    BOOL_TYPE    shift, and go to state 12
+    PRINTF       shift, and go to state 39
+    RETURN       shift, and go to state 40
+    WHILE        shift, and go to state 41
+    DO           shift, and go to state 42
+    FOR          shift, and go to state 43
+    IF           shift, and go to state 44
+    SWITCH       shift, and go to state 45
+
+    $default  reduce using rule 29 (statements)
+
+    type              go to state 46
+    statements        go to state 99
+    statement         go to state 48
+    return_statement  go to state 49
+    variable          go to state 50
+    name              go to state 51
+    while             go to state 52
+    if                go to state 53
+    do_while          go to state 54
+    for               go to state 55
+    switch            go to state 56
+
+
+State 68
+
+   54 statement_with_or_without_brackets: statement .
+
+    $default  reduce using rule 54 (statement_with_or_without_brackets)
+
+
+State 69
+
+   75 do_while: DO statement_with_or_without_brackets . WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET SEMICOLON
+
+    WHILE  shift, and go to state 100
+
+
+State 70
+
+   76 for: FOR LEFT_ROUND_BRACKET . for_expression RIGHT_ROUND_BRACKET statement_with_or_without_brackets
+
+    SEMICOLON    shift, and go to state 101
+    NAME         shift, and go to state 102
+    INT_TYPE     shift, and go to state 7
+    DOUBLE_TYPE  shift, and go to state 8
+    FLOAT_TYPE   shift, and go to state 9
+    CHAR_TYPE    shift, and go to state 10
+    STRING_TYPE  shift, and go to state 11
+    BOOL_TYPE    shift, and go to state 12
+
+    type            go to state 103
+    for_expression  go to state 104
+    for_statement   go to state 105
+    for_step        go to state 106
+
+
+State 71
+
+   72 if: IF LEFT_ROUND_BRACKET . conditions RIGHT_ROUND_BRACKET statement_with_or_without_brackets else
+
+    QUOTE               shift, and go to state 93
+    LEFT_ROUND_BRACKET  shift, and go to state 94
+    NAME                shift, and go to state 95
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 96
+    name        go to state 85
+    conditions  go to state 107
+    condition   go to state 98
+
+
+State 72
+
+   91 switch: SWITCH LEFT_ROUND_BRACKET . NAME RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET cases RIGHT_CURLY_BRACKET
+   92       | SWITCH LEFT_ROUND_BRACKET . NAME RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET cases default RIGHT_CURLY_BRACKET
+
+    NAME  shift, and go to state 108
+
+
+State 73
+
+   50 variable: type name . SEMICOLON
+   51         | type name . EQUALS expression SEMICOLON
+
+    SEMICOLON  shift, and go to state 109
+    EQUALS     shift, and go to state 110
+
+
+State 74
+
+    8 function: VOID_TYPE name LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET .
+
+    $default  reduce using rule 8 (function)
+
+
+State 75
+
+   28 statements: statement statements .
+
+    $default  reduce using rule 28 (statements)
+
+
+State 76
+
+   33 statement: name EQUALS . expression SEMICOLON
+
+    LEFT_ROUND_BRACKET  shift, and go to state 60
+    NAME                shift, and go to state 18
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 111
+    name        go to state 85
+
+
+State 77
+
+   31 statement: name PLUS . PLUS SEMICOLON
+   34          | name PLUS . EQUALS expression SEMICOLON
+
+    EQUALS  shift, and go to state 112
+    PLUS    shift, and go to state 113
+
+
+State 78
+
+   32 statement: name MINUS . MINUS SEMICOLON
+   35          | name MINUS . EQUALS expression SEMICOLON
+
+    EQUALS  shift, and go to state 114
+    MINUS   shift, and go to state 115
+
+
+State 79
+
+   36 statement: name MULTIPLY . EQUALS expression SEMICOLON
+
+    EQUALS  shift, and go to state 116
+
+
+State 80
+
+   37 statement: name DIVIDE . EQUALS expression SEMICOLON
+
+    EQUALS  shift, and go to state 117
+
+
+State 81
+
+    7 function: type name LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET .
+
+    $default  reduce using rule 7 (function)
+
+
+State 82
+
+   38 statement: PRINTF LEFT_ROUND_BRACKET QUOTE . name QUOTE RIGHT_ROUND_BRACKET SEMICOLON
+   39          | PRINTF LEFT_ROUND_BRACKET QUOTE . NUMBER QUOTE RIGHT_ROUND_BRACKET SEMICOLON
+
+    NAME    shift, and go to state 18
+    NUMBER  shift, and go to state 118
+
+    name  go to state 119
+
+
+State 83
+
+   18 expression: NUMBER .
+
+    $default  reduce using rule 18 (expression)
+
+
+State 84
+
+   13 expression: LEFT_ROUND_BRACKET expression . RIGHT_ROUND_BRACKET
+   14           | expression . PLUS expression
+   15           | expression . MINUS expression
+   16           | expression . MULTIPLY expression
+   17           | expression . DIVIDE expression
+
+    RIGHT_ROUND_BRACKET  shift, and go to state 120
+    PLUS                 shift, and go to state 88
+    MINUS                shift, and go to state 89
+    MULTIPLY             shift, and go to state 90
+    DIVIDE               shift, and go to state 91
+
+
+State 85
+
+   19 expression: name .
+
+    $default  reduce using rule 19 (expression)
+
+
+State 86
+
+   47 return_statement: RETURN NUMBER SEMICOLON .
+
+    $default  reduce using rule 47 (return_statement)
+
+
+State 87
+
+   48 return_statement: RETURN expression SEMICOLON .
+
+    $default  reduce using rule 48 (return_statement)
+
+
+State 88
+
+   14 expression: expression PLUS . expression
+
+    LEFT_ROUND_BRACKET  shift, and go to state 60
+    NAME                shift, and go to state 18
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 121
+    name        go to state 85
+
+
+State 89
+
+   15 expression: expression MINUS . expression
+
+    LEFT_ROUND_BRACKET  shift, and go to state 60
+    NAME                shift, and go to state 18
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 122
+    name        go to state 85
+
+
+State 90
+
+   16 expression: expression MULTIPLY . expression
+
+    LEFT_ROUND_BRACKET  shift, and go to state 60
+    NAME                shift, and go to state 18
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 123
+    name        go to state 85
+
+
+State 91
+
+   17 expression: expression DIVIDE . expression
+
+    LEFT_ROUND_BRACKET  shift, and go to state 60
+    NAME                shift, and go to state 18
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 124
+    name        go to state 85
+
+
+State 92
+
+   46 return_statement: RETURN name SEMICOLON .
+
+    $default  reduce using rule 46 (return_statement)
+
+
+State 93
+
+   65 condition: QUOTE . NAME QUOTE
+
+    NAME  shift, and go to state 125
+
+
+State 94
+
+   13 expression: LEFT_ROUND_BRACKET . expression RIGHT_ROUND_BRACKET
+   56 conditions: LEFT_ROUND_BRACKET . conditions RIGHT_ROUND_BRACKET
+   62 condition: LEFT_ROUND_BRACKET . NAME RIGHT_ROUND_BRACKET condition_operand expression
+   63          | LEFT_ROUND_BRACKET . NAME RIGHT_ROUND_BRACKET condition_operand LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET
+
+    QUOTE               shift, and go to state 93
+    LEFT_ROUND_BRACKET  shift, and go to state 94
+    NAME                shift, and go to state 126
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 127
+    name        go to state 85
+    conditions  go to state 128
+    condition   go to state 98
+
+
+State 95
+
+   52 name: NAME .
+   61 condition: NAME . condition_operand expression
+   64          | NAME . condition_operand LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET
+
+    RIGHT_ANGLE_BRACKET  shift, and go to state 129
+    LEFT_ANGLE_BRACKET   shift, and go to state 130
+    GREATER_EQUAL        shift, and go to state 131
+    LESS_EQUAL           shift, and go to state 132
+    EQUAL_EQUAL          shift, and go to state 133
+    NOT_EQUAL            shift, and go to state 134
+
+    $default  reduce using rule 52 (name)
+
+    condition_operand  go to state 135
+
+
+State 96
+
+   14 expression: expression . PLUS expression
+   15           | expression . MINUS expression
+   16           | expression . MULTIPLY expression
+   17           | expression . DIVIDE expression
+   60 condition: expression .
+
+    PLUS      shift, and go to state 88
+    MINUS     shift, and go to state 89
+    MULTIPLY  shift, and go to state 90
+    DIVIDE    shift, and go to state 91
+
+    $default  reduce using rule 60 (condition)
+
+
+State 97
+
+   55 while: WHILE LEFT_ROUND_BRACKET conditions . RIGHT_ROUND_BRACKET statement_with_or_without_brackets
+   57 conditions: conditions . AND conditions
+   58           | conditions . OR conditions
+
+    RIGHT_ROUND_BRACKET  shift, and go to state 136
+    AND                  shift, and go to state 137
+    OR                   shift, and go to state 138
+
+
+State 98
+
+   59 conditions: condition .
+
+    $default  reduce using rule 59 (conditions)
+
+
+State 99
+
+   53 statement_with_or_without_brackets: LEFT_CURLY_BRACKET statements . RIGHT_CURLY_BRACKET
+
+    RIGHT_CURLY_BRACKET  shift, and go to state 139
+
+
+State 100
+
+   75 do_while: DO statement_with_or_without_brackets WHILE . LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET SEMICOLON
+
+    LEFT_ROUND_BRACKET  shift, and go to state 140
+
+
+State 101
+
+   77 for_expression: SEMICOLON . conditions SEMICOLON
+   79               | SEMICOLON . conditions SEMICOLON for_step
+
+    QUOTE               shift, and go to state 93
+    LEFT_ROUND_BRACKET  shift, and go to state 94
+    NAME                shift, and go to state 95
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 96
+    name        go to state 85
+    conditions  go to state 141
+    condition   go to state 98
+
+
+State 102
+
+   81 for_statement: NAME .
+   84 for_step: NAME . PLUS PLUS
+   85         | NAME . MINUS MINUS
+   86         | NAME . EQUALS expression
+   87         | NAME . PLUS EQUALS expression
+   88         | NAME . MINUS EQUALS expression
+   89         | NAME . MULTIPLY EQUALS expression
+   90         | NAME . DIVIDE EQUALS expression
+
+    EQUALS    shift, and go to state 142
+    PLUS      shift, and go to state 143
+    MINUS     shift, and go to state 144
+    MULTIPLY  shift, and go to state 145
+    DIVIDE    shift, and go to state 146
+
+    $default  reduce using rule 81 (for_statement)
+
+
+State 103
+
+   82 for_statement: type . NAME EQUALS expression
+
+    NAME  shift, and go to state 147
+
+
+State 104
+
+   76 for: FOR LEFT_ROUND_BRACKET for_expression . RIGHT_ROUND_BRACKET statement_with_or_without_brackets
+
+    RIGHT_ROUND_BRACKET  shift, and go to state 148
+
+
+State 105
+
+   78 for_expression: for_statement . SEMICOLON conditions SEMICOLON
+   80               | for_statement . SEMICOLON conditions SEMICOLON for_step
+
+    SEMICOLON  shift, and go to state 149
+
+
+State 106
+
+   83 for_statement: for_step .
+
+    $default  reduce using rule 83 (for_statement)
+
+
+State 107
+
+   57 conditions: conditions . AND conditions
+   58           | conditions . OR conditions
+   72 if: IF LEFT_ROUND_BRACKET conditions . RIGHT_ROUND_BRACKET statement_with_or_without_brackets else
+
+    RIGHT_ROUND_BRACKET  shift, and go to state 150
+    AND                  shift, and go to state 137
+    OR                   shift, and go to state 138
+
+
+State 108
+
+   91 switch: SWITCH LEFT_ROUND_BRACKET NAME . RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET cases RIGHT_CURLY_BRACKET
+   92       | SWITCH LEFT_ROUND_BRACKET NAME . RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET cases default RIGHT_CURLY_BRACKET
+
+    RIGHT_ROUND_BRACKET  shift, and go to state 151
+
+
+State 109
+
+   50 variable: type name SEMICOLON .
+
+    $default  reduce using rule 50 (variable)
+
+
+State 110
+
+   51 variable: type name EQUALS . expression SEMICOLON
+
+    LEFT_ROUND_BRACKET  shift, and go to state 60
+    NAME                shift, and go to state 18
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 152
+    name        go to state 85
+
+
+State 111
+
+   14 expression: expression . PLUS expression
+   15           | expression . MINUS expression
+   16           | expression . MULTIPLY expression
+   17           | expression . DIVIDE expression
+   33 statement: name EQUALS expression . SEMICOLON
+
+    SEMICOLON  shift, and go to state 153
+    PLUS       shift, and go to state 88
+    MINUS      shift, and go to state 89
+    MULTIPLY   shift, and go to state 90
+    DIVIDE     shift, and go to state 91
+
+
+State 112
+
+   34 statement: name PLUS EQUALS . expression SEMICOLON
+
+    LEFT_ROUND_BRACKET  shift, and go to state 60
+    NAME                shift, and go to state 18
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 154
+    name        go to state 85
+
+
+State 113
+
+   31 statement: name PLUS PLUS . SEMICOLON
+
+    SEMICOLON  shift, and go to state 155
+
+
+State 114
+
+   35 statement: name MINUS EQUALS . expression SEMICOLON
+
+    LEFT_ROUND_BRACKET  shift, and go to state 60
+    NAME                shift, and go to state 18
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 156
+    name        go to state 85
+
+
+State 115
+
+   32 statement: name MINUS MINUS . SEMICOLON
+
+    SEMICOLON  shift, and go to state 157
+
+
+State 116
+
+   36 statement: name MULTIPLY EQUALS . expression SEMICOLON
+
+    LEFT_ROUND_BRACKET  shift, and go to state 60
+    NAME                shift, and go to state 18
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 158
+    name        go to state 85
+
+
+State 117
+
+   37 statement: name DIVIDE EQUALS . expression SEMICOLON
+
+    LEFT_ROUND_BRACKET  shift, and go to state 60
+    NAME                shift, and go to state 18
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 159
+    name        go to state 85
+
+
+State 118
+
+   39 statement: PRINTF LEFT_ROUND_BRACKET QUOTE NUMBER . QUOTE RIGHT_ROUND_BRACKET SEMICOLON
+
+    QUOTE  shift, and go to state 160
+
+
+State 119
+
+   38 statement: PRINTF LEFT_ROUND_BRACKET QUOTE name . QUOTE RIGHT_ROUND_BRACKET SEMICOLON
+
+    QUOTE  shift, and go to state 161
+
+
+State 120
+
+   13 expression: LEFT_ROUND_BRACKET expression RIGHT_ROUND_BRACKET .
+
+    $default  reduce using rule 13 (expression)
+
+
+State 121
+
+   14 expression: expression . PLUS expression
+   14           | expression PLUS expression .
+   15           | expression . MINUS expression
+   16           | expression . MULTIPLY expression
+   17           | expression . DIVIDE expression
+
+    PLUS      shift, and go to state 88
+    MINUS     shift, and go to state 89
+    MULTIPLY  shift, and go to state 90
+    DIVIDE    shift, and go to state 91
+
+    PLUS      [reduce using rule 14 (expression)]
+    MINUS     [reduce using rule 14 (expression)]
+    MULTIPLY  [reduce using rule 14 (expression)]
+    DIVIDE    [reduce using rule 14 (expression)]
+    $default  reduce using rule 14 (expression)
+
+
+State 122
+
+   14 expression: expression . PLUS expression
+   15           | expression . MINUS expression
+   15           | expression MINUS expression .
+   16           | expression . MULTIPLY expression
+   17           | expression . DIVIDE expression
+
+    PLUS      shift, and go to state 88
+    MINUS     shift, and go to state 89
+    MULTIPLY  shift, and go to state 90
+    DIVIDE    shift, and go to state 91
+
+    PLUS      [reduce using rule 15 (expression)]
+    MINUS     [reduce using rule 15 (expression)]
+    MULTIPLY  [reduce using rule 15 (expression)]
+    DIVIDE    [reduce using rule 15 (expression)]
+    $default  reduce using rule 15 (expression)
+
+
+State 123
+
+   14 expression: expression . PLUS expression
+   15           | expression . MINUS expression
+   16           | expression . MULTIPLY expression
+   16           | expression MULTIPLY expression .
+   17           | expression . DIVIDE expression
+
+    PLUS      shift, and go to state 88
+    MINUS     shift, and go to state 89
+    MULTIPLY  shift, and go to state 90
+    DIVIDE    shift, and go to state 91
+
+    PLUS      [reduce using rule 16 (expression)]
+    MINUS     [reduce using rule 16 (expression)]
+    MULTIPLY  [reduce using rule 16 (expression)]
+    DIVIDE    [reduce using rule 16 (expression)]
+    $default  reduce using rule 16 (expression)
+
+
+State 124
+
+   14 expression: expression . PLUS expression
+   15           | expression . MINUS expression
+   16           | expression . MULTIPLY expression
+   17           | expression . DIVIDE expression
+   17           | expression DIVIDE expression .
+
+    PLUS      shift, and go to state 88
+    MINUS     shift, and go to state 89
+    MULTIPLY  shift, and go to state 90
+    DIVIDE    shift, and go to state 91
+
+    PLUS      [reduce using rule 17 (expression)]
+    MINUS     [reduce using rule 17 (expression)]
+    MULTIPLY  [reduce using rule 17 (expression)]
+    DIVIDE    [reduce using rule 17 (expression)]
+    $default  reduce using rule 17 (expression)
+
+
+State 125
+
+   65 condition: QUOTE NAME . QUOTE
+
+    QUOTE  shift, and go to state 162
+
+
+State 126
+
+   52 name: NAME .
+   61 condition: NAME . condition_operand expression
+   62          | LEFT_ROUND_BRACKET NAME . RIGHT_ROUND_BRACKET condition_operand expression
+   63          | LEFT_ROUND_BRACKET NAME . RIGHT_ROUND_BRACKET condition_operand LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET
+   64          | NAME . condition_operand LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET
+
+    RIGHT_ROUND_BRACKET  shift, and go to state 163
+    RIGHT_ANGLE_BRACKET  shift, and go to state 129
+    LEFT_ANGLE_BRACKET   shift, and go to state 130
+    GREATER_EQUAL        shift, and go to state 131
+    LESS_EQUAL           shift, and go to state 132
+    EQUAL_EQUAL          shift, and go to state 133
+    NOT_EQUAL            shift, and go to state 134
+
+    RIGHT_ROUND_BRACKET  [reduce using rule 52 (name)]
+    $default             reduce using rule 52 (name)
+
+    condition_operand  go to state 135
+
+
+State 127
+
+   13 expression: LEFT_ROUND_BRACKET expression . RIGHT_ROUND_BRACKET
+   14           | expression . PLUS expression
+   15           | expression . MINUS expression
+   16           | expression . MULTIPLY expression
+   17           | expression . DIVIDE expression
+   60 condition: expression .
+
+    RIGHT_ROUND_BRACKET  shift, and go to state 120
+    PLUS                 shift, and go to state 88
+    MINUS                shift, and go to state 89
+    MULTIPLY             shift, and go to state 90
+    DIVIDE               shift, and go to state 91
+
+    RIGHT_ROUND_BRACKET  [reduce using rule 60 (condition)]
+    $default             reduce using rule 60 (condition)
+
+
+State 128
+
+   56 conditions: LEFT_ROUND_BRACKET conditions . RIGHT_ROUND_BRACKET
+   57           | conditions . AND conditions
+   58           | conditions . OR conditions
+
+    RIGHT_ROUND_BRACKET  shift, and go to state 164
+    AND                  shift, and go to state 137
+    OR                   shift, and go to state 138
+
+
+State 129
+
+   71 condition_operand: RIGHT_ANGLE_BRACKET .
+
+    $default  reduce using rule 71 (condition_operand)
+
+
+State 130
+
+   70 condition_operand: LEFT_ANGLE_BRACKET .
+
+    $default  reduce using rule 70 (condition_operand)
+
+
+State 131
+
+   66 condition_operand: GREATER_EQUAL .
+
+    $default  reduce using rule 66 (condition_operand)
+
+
+State 132
+
+   67 condition_operand: LESS_EQUAL .
+
+    $default  reduce using rule 67 (condition_operand)
+
+
+State 133
+
+   68 condition_operand: EQUAL_EQUAL .
+
+    $default  reduce using rule 68 (condition_operand)
+
+
+State 134
+
+   69 condition_operand: NOT_EQUAL .
+
+    $default  reduce using rule 69 (condition_operand)
+
+
+State 135
+
+   61 condition: NAME condition_operand . expression
+   64          | NAME condition_operand . LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET
+
+    LEFT_ROUND_BRACKET  shift, and go to state 165
+    NAME                shift, and go to state 18
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 166
+    name        go to state 85
+
+
+State 136
+
+   55 while: WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET . statement_with_or_without_brackets
+
+    LEFT_CURLY_BRACKET  shift, and go to state 67
+    NAME                shift, and go to state 18
+    INT_TYPE            shift, and go to state 7
+    DOUBLE_TYPE         shift, and go to state 8
+    FLOAT_TYPE          shift, and go to state 9
+    CHAR_TYPE           shift, and go to state 10
+    STRING_TYPE         shift, and go to state 11
+    BOOL_TYPE           shift, and go to state 12
+    PRINTF              shift, and go to state 39
+    RETURN              shift, and go to state 40
+    WHILE               shift, and go to state 41
+    DO                  shift, and go to state 42
+    FOR                 shift, and go to state 43
+    IF                  shift, and go to state 44
+    SWITCH              shift, and go to state 45
+
+    type                                go to state 46
+    statement                           go to state 68
+    return_statement                    go to state 49
+    variable                            go to state 50
+    name                                go to state 51
+    statement_with_or_without_brackets  go to state 167
+    while                               go to state 52
+    if                                  go to state 53
+    do_while                            go to state 54
+    for                                 go to state 55
+    switch                              go to state 56
+
+
+State 137
+
+   57 conditions: conditions AND . conditions
+
+    QUOTE               shift, and go to state 93
+    LEFT_ROUND_BRACKET  shift, and go to state 94
+    NAME                shift, and go to state 95
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 96
+    name        go to state 85
+    conditions  go to state 168
+    condition   go to state 98
+
+
+State 138
+
+   58 conditions: conditions OR . conditions
+
+    QUOTE               shift, and go to state 93
+    LEFT_ROUND_BRACKET  shift, and go to state 94
+    NAME                shift, and go to state 95
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 96
+    name        go to state 85
+    conditions  go to state 169
+    condition   go to state 98
+
+
+State 139
+
+   53 statement_with_or_without_brackets: LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET .
+
+    $default  reduce using rule 53 (statement_with_or_without_brackets)
+
+
+State 140
+
+   75 do_while: DO statement_with_or_without_brackets WHILE LEFT_ROUND_BRACKET . conditions RIGHT_ROUND_BRACKET SEMICOLON
+
+    QUOTE               shift, and go to state 93
+    LEFT_ROUND_BRACKET  shift, and go to state 94
+    NAME                shift, and go to state 95
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 96
+    name        go to state 85
+    conditions  go to state 170
+    condition   go to state 98
+
+
+State 141
+
+   57 conditions: conditions . AND conditions
+   58           | conditions . OR conditions
+   77 for_expression: SEMICOLON conditions . SEMICOLON
+   79               | SEMICOLON conditions . SEMICOLON for_step
+
+    SEMICOLON  shift, and go to state 171
+    AND        shift, and go to state 137
+    OR         shift, and go to state 138
+
+
+State 142
+
+   86 for_step: NAME EQUALS . expression
+
+    LEFT_ROUND_BRACKET  shift, and go to state 60
+    NAME                shift, and go to state 18
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 172
+    name        go to state 85
+
+
+State 143
+
+   84 for_step: NAME PLUS . PLUS
+   87         | NAME PLUS . EQUALS expression
+
+    EQUALS  shift, and go to state 173
+    PLUS    shift, and go to state 174
+
+
+State 144
+
+   85 for_step: NAME MINUS . MINUS
+   88         | NAME MINUS . EQUALS expression
+
+    EQUALS  shift, and go to state 175
+    MINUS   shift, and go to state 176
+
+
+State 145
+
+   89 for_step: NAME MULTIPLY . EQUALS expression
+
+    EQUALS  shift, and go to state 177
+
+
+State 146
+
+   90 for_step: NAME DIVIDE . EQUALS expression
+
+    EQUALS  shift, and go to state 178
+
+
+State 147
+
+   82 for_statement: type NAME . EQUALS expression
+
+    EQUALS  shift, and go to state 179
+
+
+State 148
+
+   76 for: FOR LEFT_ROUND_BRACKET for_expression RIGHT_ROUND_BRACKET . statement_with_or_without_brackets
+
+    LEFT_CURLY_BRACKET  shift, and go to state 67
+    NAME                shift, and go to state 18
+    INT_TYPE            shift, and go to state 7
+    DOUBLE_TYPE         shift, and go to state 8
+    FLOAT_TYPE          shift, and go to state 9
+    CHAR_TYPE           shift, and go to state 10
+    STRING_TYPE         shift, and go to state 11
+    BOOL_TYPE           shift, and go to state 12
+    PRINTF              shift, and go to state 39
+    RETURN              shift, and go to state 40
+    WHILE               shift, and go to state 41
+    DO                  shift, and go to state 42
+    FOR                 shift, and go to state 43
+    IF                  shift, and go to state 44
+    SWITCH              shift, and go to state 45
+
+    type                                go to state 46
+    statement                           go to state 68
+    return_statement                    go to state 49
+    variable                            go to state 50
+    name                                go to state 51
+    statement_with_or_without_brackets  go to state 180
+    while                               go to state 52
+    if                                  go to state 53
+    do_while                            go to state 54
+    for                                 go to state 55
+    switch                              go to state 56
+
+
+State 149
+
+   78 for_expression: for_statement SEMICOLON . conditions SEMICOLON
+   80               | for_statement SEMICOLON . conditions SEMICOLON for_step
+
+    QUOTE               shift, and go to state 93
+    LEFT_ROUND_BRACKET  shift, and go to state 94
+    NAME                shift, and go to state 95
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 96
+    name        go to state 85
+    conditions  go to state 181
+    condition   go to state 98
+
+
+State 150
+
+   72 if: IF LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET . statement_with_or_without_brackets else
+
+    LEFT_CURLY_BRACKET  shift, and go to state 67
+    NAME                shift, and go to state 18
+    INT_TYPE            shift, and go to state 7
+    DOUBLE_TYPE         shift, and go to state 8
+    FLOAT_TYPE          shift, and go to state 9
+    CHAR_TYPE           shift, and go to state 10
+    STRING_TYPE         shift, and go to state 11
+    BOOL_TYPE           shift, and go to state 12
+    PRINTF              shift, and go to state 39
+    RETURN              shift, and go to state 40
+    WHILE               shift, and go to state 41
+    DO                  shift, and go to state 42
+    FOR                 shift, and go to state 43
+    IF                  shift, and go to state 44
+    SWITCH              shift, and go to state 45
+
+    type                                go to state 46
+    statement                           go to state 68
+    return_statement                    go to state 49
+    variable                            go to state 50
+    name                                go to state 51
+    statement_with_or_without_brackets  go to state 182
+    while                               go to state 52
+    if                                  go to state 53
+    do_while                            go to state 54
+    for                                 go to state 55
+    switch                              go to state 56
+
+
+State 151
+
+   91 switch: SWITCH LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET . LEFT_CURLY_BRACKET cases RIGHT_CURLY_BRACKET
+   92       | SWITCH LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET . LEFT_CURLY_BRACKET cases default RIGHT_CURLY_BRACKET
+
+    LEFT_CURLY_BRACKET  shift, and go to state 183
+
+
+State 152
+
+   14 expression: expression . PLUS expression
+   15           | expression . MINUS expression
+   16           | expression . MULTIPLY expression
+   17           | expression . DIVIDE expression
+   51 variable: type name EQUALS expression . SEMICOLON
+
+    SEMICOLON  shift, and go to state 184
+    PLUS       shift, and go to state 88
+    MINUS      shift, and go to state 89
+    MULTIPLY   shift, and go to state 90
+    DIVIDE     shift, and go to state 91
+
+
+State 153
+
+   33 statement: name EQUALS expression SEMICOLON .
+
+    $default  reduce using rule 33 (statement)
+
+
+State 154
+
+   14 expression: expression . PLUS expression
+   15           | expression . MINUS expression
+   16           | expression . MULTIPLY expression
+   17           | expression . DIVIDE expression
+   34 statement: name PLUS EQUALS expression . SEMICOLON
+
+    SEMICOLON  shift, and go to state 185
+    PLUS       shift, and go to state 88
+    MINUS      shift, and go to state 89
+    MULTIPLY   shift, and go to state 90
+    DIVIDE     shift, and go to state 91
+
+
+State 155
+
+   31 statement: name PLUS PLUS SEMICOLON .
+
+    $default  reduce using rule 31 (statement)
+
+
+State 156
+
+   14 expression: expression . PLUS expression
+   15           | expression . MINUS expression
+   16           | expression . MULTIPLY expression
+   17           | expression . DIVIDE expression
+   35 statement: name MINUS EQUALS expression . SEMICOLON
+
+    SEMICOLON  shift, and go to state 186
+    PLUS       shift, and go to state 88
+    MINUS      shift, and go to state 89
+    MULTIPLY   shift, and go to state 90
+    DIVIDE     shift, and go to state 91
+
+
+State 157
+
+   32 statement: name MINUS MINUS SEMICOLON .
+
+    $default  reduce using rule 32 (statement)
+
+
+State 158
+
+   14 expression: expression . PLUS expression
+   15           | expression . MINUS expression
+   16           | expression . MULTIPLY expression
+   17           | expression . DIVIDE expression
+   36 statement: name MULTIPLY EQUALS expression . SEMICOLON
+
+    SEMICOLON  shift, and go to state 187
+    PLUS       shift, and go to state 88
+    MINUS      shift, and go to state 89
+    MULTIPLY   shift, and go to state 90
+    DIVIDE     shift, and go to state 91
+
+
+State 159
+
+   14 expression: expression . PLUS expression
+   15           | expression . MINUS expression
+   16           | expression . MULTIPLY expression
+   17           | expression . DIVIDE expression
+   37 statement: name DIVIDE EQUALS expression . SEMICOLON
+
+    SEMICOLON  shift, and go to state 188
+    PLUS       shift, and go to state 88
+    MINUS      shift, and go to state 89
+    MULTIPLY   shift, and go to state 90
+    DIVIDE     shift, and go to state 91
+
+
+State 160
+
+   39 statement: PRINTF LEFT_ROUND_BRACKET QUOTE NUMBER QUOTE . RIGHT_ROUND_BRACKET SEMICOLON
+
+    RIGHT_ROUND_BRACKET  shift, and go to state 189
+
+
+State 161
+
+   38 statement: PRINTF LEFT_ROUND_BRACKET QUOTE name QUOTE . RIGHT_ROUND_BRACKET SEMICOLON
+
+    RIGHT_ROUND_BRACKET  shift, and go to state 190
+
+
+State 162
+
+   65 condition: QUOTE NAME QUOTE .
+
+    $default  reduce using rule 65 (condition)
+
+
+State 163
+
+   62 condition: LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET . condition_operand expression
+   63          | LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET . condition_operand LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET
+
+    RIGHT_ANGLE_BRACKET  shift, and go to state 129
+    LEFT_ANGLE_BRACKET   shift, and go to state 130
+    GREATER_EQUAL        shift, and go to state 131
+    LESS_EQUAL           shift, and go to state 132
+    EQUAL_EQUAL          shift, and go to state 133
+    NOT_EQUAL            shift, and go to state 134
+
+    condition_operand  go to state 191
+
+
+State 164
+
+   56 conditions: LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET .
+
+    $default  reduce using rule 56 (conditions)
+
+
+State 165
+
+   13 expression: LEFT_ROUND_BRACKET . expression RIGHT_ROUND_BRACKET
+   64 condition: NAME condition_operand LEFT_ROUND_BRACKET . NAME RIGHT_ROUND_BRACKET
+
+    LEFT_ROUND_BRACKET  shift, and go to state 60
+    NAME                shift, and go to state 192
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 84
+    name        go to state 85
+
+
+State 166
+
+   14 expression: expression . PLUS expression
+   15           | expression . MINUS expression
+   16           | expression . MULTIPLY expression
+   17           | expression . DIVIDE expression
+   61 condition: NAME condition_operand expression .
+
+    PLUS      shift, and go to state 88
+    MINUS     shift, and go to state 89
+    MULTIPLY  shift, and go to state 90
+    DIVIDE    shift, and go to state 91
+
+    $default  reduce using rule 61 (condition)
+
+
+State 167
+
+   55 while: WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement_with_or_without_brackets .
+
+    $default  reduce using rule 55 (while)
+
+
+State 168
+
+   57 conditions: conditions . AND conditions
+   57           | conditions AND conditions .
+   58           | conditions . OR conditions
+
+    AND  shift, and go to state 137
+    OR   shift, and go to state 138
+
+    AND       [reduce using rule 57 (conditions)]
+    OR        [reduce using rule 57 (conditions)]
+    $default  reduce using rule 57 (conditions)
+
+
+State 169
+
+   57 conditions: conditions . AND conditions
+   58           | conditions . OR conditions
+   58           | conditions OR conditions .
+
+    AND  shift, and go to state 137
+    OR   shift, and go to state 138
+
+    AND       [reduce using rule 58 (conditions)]
+    OR        [reduce using rule 58 (conditions)]
+    $default  reduce using rule 58 (conditions)
+
+
+State 170
+
+   57 conditions: conditions . AND conditions
+   58           | conditions . OR conditions
+   75 do_while: DO statement_with_or_without_brackets WHILE LEFT_ROUND_BRACKET conditions . RIGHT_ROUND_BRACKET SEMICOLON
+
+    RIGHT_ROUND_BRACKET  shift, and go to state 193
+    AND                  shift, and go to state 137
+    OR                   shift, and go to state 138
+
+
+State 171
+
+   77 for_expression: SEMICOLON conditions SEMICOLON .
+   79               | SEMICOLON conditions SEMICOLON . for_step
+
+    NAME  shift, and go to state 194
+
+    $default  reduce using rule 77 (for_expression)
+
+    for_step  go to state 195
+
+
+State 172
+
+   14 expression: expression . PLUS expression
+   15           | expression . MINUS expression
+   16           | expression . MULTIPLY expression
+   17           | expression . DIVIDE expression
+   86 for_step: NAME EQUALS expression .
+
+    PLUS      shift, and go to state 88
+    MINUS     shift, and go to state 89
+    MULTIPLY  shift, and go to state 90
+    DIVIDE    shift, and go to state 91
+
+    $default  reduce using rule 86 (for_step)
+
+
+State 173
+
+   87 for_step: NAME PLUS EQUALS . expression
+
+    LEFT_ROUND_BRACKET  shift, and go to state 60
+    NAME                shift, and go to state 18
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 196
+    name        go to state 85
+
+
+State 174
+
+   84 for_step: NAME PLUS PLUS .
+
+    $default  reduce using rule 84 (for_step)
+
+
+State 175
+
+   88 for_step: NAME MINUS EQUALS . expression
+
+    LEFT_ROUND_BRACKET  shift, and go to state 60
+    NAME                shift, and go to state 18
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 197
+    name        go to state 85
+
+
+State 176
+
+   85 for_step: NAME MINUS MINUS .
+
+    $default  reduce using rule 85 (for_step)
+
+
+State 177
+
+   89 for_step: NAME MULTIPLY EQUALS . expression
+
+    LEFT_ROUND_BRACKET  shift, and go to state 60
+    NAME                shift, and go to state 18
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 198
+    name        go to state 85
+
+
+State 178
+
+   90 for_step: NAME DIVIDE EQUALS . expression
+
+    LEFT_ROUND_BRACKET  shift, and go to state 60
+    NAME                shift, and go to state 18
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 199
+    name        go to state 85
+
+
+State 179
+
+   82 for_statement: type NAME EQUALS . expression
+
+    LEFT_ROUND_BRACKET  shift, and go to state 60
+    NAME                shift, and go to state 18
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 200
+    name        go to state 85
+
+
+State 180
+
+   76 for: FOR LEFT_ROUND_BRACKET for_expression RIGHT_ROUND_BRACKET statement_with_or_without_brackets .
+
+    $default  reduce using rule 76 (for)
+
+
+State 181
+
+   57 conditions: conditions . AND conditions
+   58           | conditions . OR conditions
+   78 for_expression: for_statement SEMICOLON conditions . SEMICOLON
+   80               | for_statement SEMICOLON conditions . SEMICOLON for_step
+
+    SEMICOLON  shift, and go to state 201
+    AND        shift, and go to state 137
+    OR         shift, and go to state 138
+
+
+State 182
+
+   72 if: IF LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement_with_or_without_brackets . else
+
+    ELSE  shift, and go to state 202
+
+    ELSE      [reduce using rule 74 (else)]
+    $default  reduce using rule 74 (else)
+
+    else  go to state 203
+
+
+State 183
+
+   91 switch: SWITCH LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET . cases RIGHT_CURLY_BRACKET
+   92       | SWITCH LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET . cases default RIGHT_CURLY_BRACKET
+
+    CASE  shift, and go to state 204
+
+    cases  go to state 205
+    case   go to state 206
+
+
+State 184
+
+   51 variable: type name EQUALS expression SEMICOLON .
+
+    $default  reduce using rule 51 (variable)
+
+
+State 185
+
+   34 statement: name PLUS EQUALS expression SEMICOLON .
+
+    $default  reduce using rule 34 (statement)
+
+
+State 186
+
+   35 statement: name MINUS EQUALS expression SEMICOLON .
+
+    $default  reduce using rule 35 (statement)
+
+
+State 187
+
+   36 statement: name MULTIPLY EQUALS expression SEMICOLON .
+
+    $default  reduce using rule 36 (statement)
+
+
+State 188
+
+   37 statement: name DIVIDE EQUALS expression SEMICOLON .
+
+    $default  reduce using rule 37 (statement)
+
+
+State 189
+
+   39 statement: PRINTF LEFT_ROUND_BRACKET QUOTE NUMBER QUOTE RIGHT_ROUND_BRACKET . SEMICOLON
+
+    SEMICOLON  shift, and go to state 207
+
+
+State 190
+
+   38 statement: PRINTF LEFT_ROUND_BRACKET QUOTE name QUOTE RIGHT_ROUND_BRACKET . SEMICOLON
+
+    SEMICOLON  shift, and go to state 208
+
+
+State 191
+
+   62 condition: LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET condition_operand . expression
+   63          | LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET condition_operand . LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET
+
+    LEFT_ROUND_BRACKET  shift, and go to state 209
+    NAME                shift, and go to state 18
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 210
+    name        go to state 85
+
+
+State 192
+
+   52 name: NAME .
+   64 condition: NAME condition_operand LEFT_ROUND_BRACKET NAME . RIGHT_ROUND_BRACKET
+
+    RIGHT_ROUND_BRACKET  shift, and go to state 211
+
+    RIGHT_ROUND_BRACKET  [reduce using rule 52 (name)]
+    $default             reduce using rule 52 (name)
+
+
+State 193
+
+   75 do_while: DO statement_with_or_without_brackets WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET . SEMICOLON
+
+    SEMICOLON  shift, and go to state 212
+
+
+State 194
+
+   84 for_step: NAME . PLUS PLUS
+   85         | NAME . MINUS MINUS
+   86         | NAME . EQUALS expression
+   87         | NAME . PLUS EQUALS expression
+   88         | NAME . MINUS EQUALS expression
+   89         | NAME . MULTIPLY EQUALS expression
+   90         | NAME . DIVIDE EQUALS expression
+
+    EQUALS    shift, and go to state 142
+    PLUS      shift, and go to state 143
+    MINUS     shift, and go to state 144
+    MULTIPLY  shift, and go to state 145
+    DIVIDE    shift, and go to state 146
+
+
+State 195
+
+   79 for_expression: SEMICOLON conditions SEMICOLON for_step .
+
+    $default  reduce using rule 79 (for_expression)
+
+
+State 196
+
+   14 expression: expression . PLUS expression
+   15           | expression . MINUS expression
+   16           | expression . MULTIPLY expression
+   17           | expression . DIVIDE expression
+   87 for_step: NAME PLUS EQUALS expression .
+
+    PLUS      shift, and go to state 88
+    MINUS     shift, and go to state 89
+    MULTIPLY  shift, and go to state 90
+    DIVIDE    shift, and go to state 91
+
+    $default  reduce using rule 87 (for_step)
+
+
+State 197
+
+   14 expression: expression . PLUS expression
+   15           | expression . MINUS expression
+   16           | expression . MULTIPLY expression
+   17           | expression . DIVIDE expression
+   88 for_step: NAME MINUS EQUALS expression .
+
+    PLUS      shift, and go to state 88
+    MINUS     shift, and go to state 89
+    MULTIPLY  shift, and go to state 90
+    DIVIDE    shift, and go to state 91
+
+    $default  reduce using rule 88 (for_step)
+
+
+State 198
+
+   14 expression: expression . PLUS expression
+   15           | expression . MINUS expression
+   16           | expression . MULTIPLY expression
+   17           | expression . DIVIDE expression
+   89 for_step: NAME MULTIPLY EQUALS expression .
+
+    PLUS      shift, and go to state 88
+    MINUS     shift, and go to state 89
+    MULTIPLY  shift, and go to state 90
+    DIVIDE    shift, and go to state 91
+
+    $default  reduce using rule 89 (for_step)
+
+
+State 199
+
+   14 expression: expression . PLUS expression
+   15           | expression . MINUS expression
+   16           | expression . MULTIPLY expression
+   17           | expression . DIVIDE expression
+   90 for_step: NAME DIVIDE EQUALS expression .
+
+    PLUS      shift, and go to state 88
+    MINUS     shift, and go to state 89
+    MULTIPLY  shift, and go to state 90
+    DIVIDE    shift, and go to state 91
+
+    $default  reduce using rule 90 (for_step)
+
+
+State 200
+
+   14 expression: expression . PLUS expression
+   15           | expression . MINUS expression
+   16           | expression . MULTIPLY expression
+   17           | expression . DIVIDE expression
+   82 for_statement: type NAME EQUALS expression .
+
+    PLUS      shift, and go to state 88
+    MINUS     shift, and go to state 89
+    MULTIPLY  shift, and go to state 90
+    DIVIDE    shift, and go to state 91
+
+    $default  reduce using rule 82 (for_statement)
+
+
+State 201
+
+   78 for_expression: for_statement SEMICOLON conditions SEMICOLON .
+   80               | for_statement SEMICOLON conditions SEMICOLON . for_step
+
+    NAME  shift, and go to state 194
+
+    $default  reduce using rule 78 (for_expression)
+
+    for_step  go to state 213
+
+
+State 202
+
+   73 else: ELSE . statement_with_or_without_brackets
+
+    LEFT_CURLY_BRACKET  shift, and go to state 67
+    NAME                shift, and go to state 18
+    INT_TYPE            shift, and go to state 7
+    DOUBLE_TYPE         shift, and go to state 8
+    FLOAT_TYPE          shift, and go to state 9
+    CHAR_TYPE           shift, and go to state 10
+    STRING_TYPE         shift, and go to state 11
+    BOOL_TYPE           shift, and go to state 12
+    PRINTF              shift, and go to state 39
+    RETURN              shift, and go to state 40
+    WHILE               shift, and go to state 41
+    DO                  shift, and go to state 42
+    FOR                 shift, and go to state 43
+    IF                  shift, and go to state 44
+    SWITCH              shift, and go to state 45
+
+    type                                go to state 46
+    statement                           go to state 68
+    return_statement                    go to state 49
+    variable                            go to state 50
+    name                                go to state 51
+    statement_with_or_without_brackets  go to state 214
+    while                               go to state 52
+    if                                  go to state 53
+    do_while                            go to state 54
+    for                                 go to state 55
+    switch                              go to state 56
+
+
+State 203
+
+   72 if: IF LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement_with_or_without_brackets else .
+
+    $default  reduce using rule 72 (if)
+
+
+State 204
+
+   95 case: CASE . value COLON statements break
+
+    QUOTE   shift, and go to state 215
+    NUMBER  shift, and go to state 216
+
+    value  go to state 217
+
+
+State 205
+
+   91 switch: SWITCH LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET cases . RIGHT_CURLY_BRACKET
+   92       | SWITCH LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET cases . default RIGHT_CURLY_BRACKET
+
+    RIGHT_CURLY_BRACKET  shift, and go to state 218
+    DEFAULT              shift, and go to state 219
+
+    default  go to state 220
+
+
+State 206
+
+   93 cases: case . cases
+   94      | case .
+
+    CASE  shift, and go to state 204
+
+    $default  reduce using rule 94 (cases)
+
+    cases  go to state 221
+    case   go to state 206
+
+
+State 207
+
+   39 statement: PRINTF LEFT_ROUND_BRACKET QUOTE NUMBER QUOTE RIGHT_ROUND_BRACKET SEMICOLON .
+
+    $default  reduce using rule 39 (statement)
+
+
+State 208
+
+   38 statement: PRINTF LEFT_ROUND_BRACKET QUOTE name QUOTE RIGHT_ROUND_BRACKET SEMICOLON .
+
+    $default  reduce using rule 38 (statement)
+
+
+State 209
+
+   13 expression: LEFT_ROUND_BRACKET . expression RIGHT_ROUND_BRACKET
+   63 condition: LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET condition_operand LEFT_ROUND_BRACKET . NAME RIGHT_ROUND_BRACKET
+
+    LEFT_ROUND_BRACKET  shift, and go to state 60
+    NAME                shift, and go to state 222
+    NUMBER              shift, and go to state 83
+    TRUE_STR            shift, and go to state 62
+    FALSE_STR           shift, and go to state 63
+
+    expression  go to state 84
+    name        go to state 85
+
+
+State 210
+
+   14 expression: expression . PLUS expression
+   15           | expression . MINUS expression
+   16           | expression . MULTIPLY expression
+   17           | expression . DIVIDE expression
+   62 condition: LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET condition_operand expression .
+
+    PLUS      shift, and go to state 88
+    MINUS     shift, and go to state 89
+    MULTIPLY  shift, and go to state 90
+    DIVIDE    shift, and go to state 91
+
+    $default  reduce using rule 62 (condition)
+
+
+State 211
+
+   64 condition: NAME condition_operand LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET .
+
+    $default  reduce using rule 64 (condition)
+
+
+State 212
+
+   75 do_while: DO statement_with_or_without_brackets WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET SEMICOLON .
+
+    $default  reduce using rule 75 (do_while)
+
+
+State 213
+
+   80 for_expression: for_statement SEMICOLON conditions SEMICOLON for_step .
+
+    $default  reduce using rule 80 (for_expression)
+
+
+State 214
+
+   73 else: ELSE statement_with_or_without_brackets .
+
+    $default  reduce using rule 73 (else)
+
+
+State 215
+
+   96 value: QUOTE . NAME QUOTE
+
+    NAME  shift, and go to state 223
+
+
+State 216
+
+   97 value: NUMBER .
+
+    $default  reduce using rule 97 (value)
+
+
+State 217
+
+   95 case: CASE value . COLON statements break
+
+    COLON  shift, and go to state 224
+
+
+State 218
+
+   91 switch: SWITCH LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET cases RIGHT_CURLY_BRACKET .
+
+    $default  reduce using rule 91 (switch)
+
+
+State 219
+
+  100 default: DEFAULT . COLON statements break
+
+    COLON  shift, and go to state 225
+
+
+State 220
+
+   92 switch: SWITCH LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET cases default . RIGHT_CURLY_BRACKET
+
+    RIGHT_CURLY_BRACKET  shift, and go to state 226
+
+
+State 221
+
+   93 cases: case cases .
+
+    $default  reduce using rule 93 (cases)
+
+
+State 222
+
+   52 name: NAME .
+   63 condition: LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET condition_operand LEFT_ROUND_BRACKET NAME . RIGHT_ROUND_BRACKET
+
+    RIGHT_ROUND_BRACKET  shift, and go to state 227
+
+    RIGHT_ROUND_BRACKET  [reduce using rule 52 (name)]
+    $default             reduce using rule 52 (name)
+
+
+State 223
+
+   96 value: QUOTE NAME . QUOTE
+
+    QUOTE  shift, and go to state 228
+
+
+State 224
+
+   95 case: CASE value COLON . statements break
+
+    NAME         shift, and go to state 18
+    INT_TYPE     shift, and go to state 7
+    DOUBLE_TYPE  shift, and go to state 8
+    FLOAT_TYPE   shift, and go to state 9
+    CHAR_TYPE    shift, and go to state 10
+    STRING_TYPE  shift, and go to state 11
+    BOOL_TYPE    shift, and go to state 12
+    PRINTF       shift, and go to state 39
+    RETURN       shift, and go to state 40
+    WHILE        shift, and go to state 41
+    DO           shift, and go to state 42
+    FOR          shift, and go to state 43
+    IF           shift, and go to state 44
+    SWITCH       shift, and go to state 45
+
+    $default  reduce using rule 29 (statements)
+
+    type              go to state 46
+    statements        go to state 229
+    statement         go to state 48
+    return_statement  go to state 49
+    variable          go to state 50
+    name              go to state 51
+    while             go to state 52
+    if                go to state 53
+    do_while          go to state 54
+    for               go to state 55
+    switch            go to state 56
+
+
+State 225
+
+  100 default: DEFAULT COLON . statements break
+
+    NAME         shift, and go to state 18
+    INT_TYPE     shift, and go to state 7
+    DOUBLE_TYPE  shift, and go to state 8
+    FLOAT_TYPE   shift, and go to state 9
+    CHAR_TYPE    shift, and go to state 10
+    STRING_TYPE  shift, and go to state 11
+    BOOL_TYPE    shift, and go to state 12
+    PRINTF       shift, and go to state 39
+    RETURN       shift, and go to state 40
+    WHILE        shift, and go to state 41
+    DO           shift, and go to state 42
+    FOR          shift, and go to state 43
+    IF           shift, and go to state 44
+    SWITCH       shift, and go to state 45
+
+    $default  reduce using rule 29 (statements)
+
+    type              go to state 46
+    statements        go to state 230
+    statement         go to state 48
+    return_statement  go to state 49
+    variable          go to state 50
+    name              go to state 51
+    while             go to state 52
+    if                go to state 53
+    do_while          go to state 54
+    for               go to state 55
+    switch            go to state 56
+
+
+State 226
+
+   92 switch: SWITCH LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET cases default RIGHT_CURLY_BRACKET .
+
+    $default  reduce using rule 92 (switch)
+
+
+State 227
+
+   63 condition: LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET condition_operand LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET .
+
+    $default  reduce using rule 63 (condition)
+
+
+State 228
+
+   96 value: QUOTE NAME QUOTE .
+
+    $default  reduce using rule 96 (value)
+
+
+State 229
+
+   95 case: CASE value COLON statements . break
+
+    BREAK  shift, and go to state 231
+
+    $default  reduce using rule 99 (break)
+
+    break  go to state 232
+
+
+State 230
+
+  100 default: DEFAULT COLON statements . break
+
+    BREAK  shift, and go to state 231
+
+    $default  reduce using rule 99 (break)
+
+    break  go to state 233
+
+
+State 231
+
+   98 break: BREAK . SEMICOLON
+
+    SEMICOLON  shift, and go to state 234
+
+
+State 232
+
+   95 case: CASE value COLON statements break .
+
+    $default  reduce using rule 95 (case)
+
+
+State 233
+
+  100 default: DEFAULT COLON statements break .
+
+    $default  reduce using rule 100 (default)
+
+
+State 234
+
+   98 break: BREAK SEMICOLON .
+
+    $default  reduce using rule 98 (break)

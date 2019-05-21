@@ -8,7 +8,6 @@
 quote			\"
 star			\*
 name        	[a-zA-Z]([0-9]*[a-zA-Z]*)*
-string			{name}*
 number			[0-9]*
 comment_line	\/\/.*
 comment_block	\/{star}[!?.,\*=<>'";:{}()\[\]_\+\-0-9a-zA-Z \n\t\v\f]*{star}\/
@@ -60,7 +59,6 @@ linefeed    	\n
 "break"					{return BREAK;}
 "default"				{return DEFAULT;}
 {name}                  {return NAME;}
-{string}				{return STRING;}
 {number}				{return NUMBER;}
 {comment_line}			
 {comment_block}			
