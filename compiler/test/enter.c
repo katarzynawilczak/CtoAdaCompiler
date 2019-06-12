@@ -14,6 +14,11 @@ double iloczyn (double a, double second) {
 
 int sum (int a, int b) {
 	int c;
+	a++;
+	b--;
+	a+=4;
+	a-=2;
+	printf("45");
 	return a+b;
 }
 

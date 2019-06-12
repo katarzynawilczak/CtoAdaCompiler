@@ -7,8 +7,9 @@ namespace compiler {
     
     public:
     
-        Input(SyntaxTree *libraries, SyntaxTree *functions) {
+        Input(SyntaxTree *libraries, SyntaxTree *firstFunction, SyntaxTree *functions) {
             children.push_back(libraries);
+            children.push_back(firstFunction);
         	children.push_back(functions);
         }
         

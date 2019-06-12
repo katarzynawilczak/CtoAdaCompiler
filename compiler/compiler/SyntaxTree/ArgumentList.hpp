@@ -20,7 +20,7 @@ namespace compiler {
         		code += children[0]->toCode();
 			
 			if (children[1] != nullptr)
-				code += ", " + children[1]->toCode();
+				code += "; " + children[1]->toCode();
 
         	return code;
         }

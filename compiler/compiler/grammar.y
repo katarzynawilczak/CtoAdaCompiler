@@ -33,7 +33,7 @@
 %token GREATER_EQUAL LESS_EQUAL EQUAL_EQUAL NOT_EQUAL EQUALS
 %token AND OR
 %token PLUS MINUS MULTIPLY DIVIDE
-%token NUMBER TRUE_STR FALSE_STR
+%token NUMBER TRUE_STR FALSE_STR linefeed
 
 
 %start input
@@ -41,7 +41,7 @@
 %%
 
 input:
-	 libraries function_list													{root.reset(new Input($1, $2));}
+	 libraries procedure_main_is function_list									{root.reset(new Input($1, $2, $3));}
 
 libraries:
 	library libraries															{$$ = new compiler::Libraries($1, $2);}
@@ -49,6 +49,10 @@ libraries:
 	
 library:
 	INCLUDE LEFT_ANGLE_BRACKET name DOT name RIGHT_ANGLE_BRACKET				{$$ = new compiler::Library($3, $5);}
+	
+procedure_main_is:
+	linefeed																	{$$ = new compiler::ProcedureMainIs();}
+	| %empty																	{$$ = new compiler::ProcedureMainIs();}
 
 function_list:
 	function function_list														{$$ = new compiler::FunctionList($1, $2);}
@@ -67,15 +71,15 @@ argument:
 	| %empty																	{$$ = nullptr;}
     
 expression:
-	LEFT_ROUND_BRACKET expression RIGHT_ROUND_BRACKET
-	| expression PLUS expression
-	| expression MINUS expression
-	| expression MULTIPLY expression
-	| expression DIVIDE expression
-	| NUMBER
-	| name
-	| TRUE_STR
-	| FALSE_STR
+	LEFT_ROUND_BRACKET expression RIGHT_ROUND_BRACKET							{$$ = nullptr;}
+	| expression PLUS expression												{$$ = nullptr;}
+	| expression MINUS expression												{$$ = nullptr;}
+	| expression MULTIPLY expression											{$$ = nullptr;}
+	| expression DIVIDE expression												{$$ = nullptr;}
+	| NUMBER																	{$$ = $1;}
+	| name																		{$$ = $1;}
+	| TRUE_STR																	{$$ = $1;}
+	| FALSE_STR																	{$$ = $1;}
     
 type:
 	INT_TYPE		{$$ = new compiler::Type(yytext);}
@@ -86,26 +90,26 @@ type:
 	| BOOL_TYPE		{$$ = new compiler::Type(yytext);}
     
 statements:
-    statement statements													{}
+    statement statements													{$$ = new compiler::Statements($1, $2);}
     | %empty																{$$ = nullptr;}
 
 statement:
-	variable
-	| name PLUS PLUS SEMICOLON
-	| name MINUS MINUS	SEMICOLON
-    | name EQUALS expression SEMICOLON
-	| name PLUS EQUALS expression SEMICOLON
-	| name MINUS EQUALS expression SEMICOLON
-	| name MULTIPLY EQUALS expression SEMICOLON
-	| name DIVIDE EQUALS expression SEMICOLON 
-    | PRINTF LEFT_ROUND_BRACKET QUOTE name QUOTE RIGHT_ROUND_BRACKET SEMICOLON	{}
-	| PRINTF LEFT_ROUND_BRACKET QUOTE NUMBER QUOTE RIGHT_ROUND_BRACKET SEMICOLON	{}
-	| while
-	| if
-	| do_while
-	| for
-	| switch
-	| return_statement
+	variable																{$$ = nullptr;}
+	| name PLUS PLUS SEMICOLON												{$$ = new compiler::Statement("++", $1);}
+	| name MINUS MINUS SEMICOLON											{$$ = new compiler::Statement("--", $1);}
+    | name EQUALS expression SEMICOLON										{$$ = new compiler::Statement("=", $1, $3);}
+	| name PLUS EQUALS expression SEMICOLON									{$$ = new compiler::Statement("+=", $1, $4);}
+	| name MINUS EQUALS expression SEMICOLON								{$$ = new compiler::Statement("-=", $1, $4);}
+	| name MULTIPLY EQUALS expression SEMICOLON								{$$ = new compiler::Statement("*=", $1, $4);}
+	| name DIVIDE EQUALS expression SEMICOLON 								{$$ = new compiler::Statement("/=", $1, $4);}
+    | PRINTF LEFT_ROUND_BRACKET QUOTE name QUOTE RIGHT_ROUND_BRACKET SEMICOLON	{$$ = new compiler::Statement("printf", $4);}
+	| PRINTF LEFT_ROUND_BRACKET QUOTE NUMBER QUOTE RIGHT_ROUND_BRACKET SEMICOLON{$$ = new compiler::Statement("printf", $4);}
+	| while																	{$$ = nullptr;}
+	| if																	{$$ = nullptr;}
+	| do_while																{$$ = nullptr;}
+	| for																	{$$ = nullptr;}
+	| switch																{$$ = nullptr;}
+	| return_statement														{$$ = nullptr;}
 
 return_statement:
 	RETURN name SEMICOLON

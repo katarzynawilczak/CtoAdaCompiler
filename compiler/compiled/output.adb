@@ -1,17 +1,15 @@
 with Ada.Text_IO;
 
-function iloczyn(a : Float, second : Float) is
+procedure Output Is
+function iloczyn(a : Float; second : Float) is
 begin
-c : Float;
 end iloczyn;
 
-function sum(a : Integer, b : Integer) is
+function sum(a : Integer; b : Integer) is
 begin
-c : Integer;
+a = a + 1;
+b = b - 1;
 end sum;
 
-procedure Output is
 begin
-end main;
-
-
+end Output;

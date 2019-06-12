@@ -21,10 +21,7 @@ namespace compiler {
         virtual std::string toCode() const {
         	std::string code;
 			
-			if (children[0]->toCode() == "int" && children[1]->toCode() == "main") {
-				code += "procedure Output is\n";
-			}
-			else {
+			if (!(children[0]->toCode() == "int" && children[1]->toCode() == "main")) {
 				code += "function " + children[1]->toCode() + "(";
 				code += children[2]->toCode();
 				code += ") is\n";
@@ -39,7 +36,10 @@ namespace compiler {
         		if (node != nullptr) {
         			code += node->toCode();
         		}*/
-        	code += "end " + children[1]->toCode() + ";\n\n";
+        	if (children[0]->toCode() == "int" && children[1]->toCode() == "main")
+        		code += "end Output;";
+        	else
+        		code += "end " + children[1]->toCode() + ";\n\n";
         	return code;
         }
     };
