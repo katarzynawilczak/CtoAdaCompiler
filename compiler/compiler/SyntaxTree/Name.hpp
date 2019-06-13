@@ -11,7 +11,10 @@ namespace compiler {
         virtual ~Name() = default;
         
         virtual std::string toCode() const {
-        	return name;
+        	if (name == "!=")
+        		return "/=";
+        	else
+        		return name;
         }
     
     private:

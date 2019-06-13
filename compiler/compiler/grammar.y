@@ -87,12 +87,6 @@ name:
 
 number:
 	NUMBER																	{$$ = new compiler::Name(yytext);}
-	
-true_str:
-	TRUE_STR																{$$ = new compiler::Name(yytext);}
-	
-false_str:
-	FALSE_STR																{$$ = new compiler::Name(yytext);}
     
 type:
 	INT_TYPE																{$$ = new compiler::Type(yytext);}
@@ -117,7 +111,7 @@ statement:
 	| name DIVIDE EQUALS expression SEMICOLON 								{$$ = new compiler::Statement("/=", $1, $4);}
     | PRINTF LEFT_ROUND_BRACKET QUOTE name QUOTE RIGHT_ROUND_BRACKET SEMICOLON	{$$ = new compiler::Statement("printf", $4);}
 	| PRINTF LEFT_ROUND_BRACKET QUOTE number QUOTE RIGHT_ROUND_BRACKET SEMICOLON{$$ = new compiler::Statement("printf", $4);}
-	| while																	{$$ = nullptr;}
+	| while																	{$$ = $1;}
 	| if																	{$$ = nullptr;}
 	| do_while																{$$ = nullptr;}
 	| for																	{$$ = nullptr;}
@@ -136,33 +130,33 @@ variable:
     
 
 statement_with_or_without_brackets:
-	LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
-	| statement
+	LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET						{}
+	| statement																{}
     
 while:
-	WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement_with_or_without_brackets
+	WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement_with_or_without_brackets {$$ = new compiler::While($3, $5);}
 	
 conditions:
-	LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET
-	| conditions AND conditions
-	| conditions OR conditions
-	| condition
+	LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET						{$$ = new compiler::Conditions("()", $2);}
+	| conditions AND conditions												{$$ = new compiler::Conditions("and", $1, $3);}
+	| conditions OR conditions												{$$ = new compiler::Conditions("or", $1, $3);}
+	| condition																{$$ = $1;}
 
 condition:
-	expression
-	| NAME condition_operand expression
-	| LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET condition_operand expression
-	| LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET condition_operand LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET
-	| NAME condition_operand LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET
-	| QUOTE NAME QUOTE
+	expression																{$$ = $1;}
+	| name condition_operand expression										{$$ = new compiler::Condition("name op exp", $1, $2, $3);}
+	| LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET condition_operand expression {$$ = new compiler::Condition("(name) op exp", $2, $4, $5);}
+	| LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET condition_operand LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET {$$ = new compiler::Condition("(name) op (name)", $2, $4, $6);}
+	| name condition_operand LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET	{$$ = new compiler::Condition("name op (name)", $1, $2, $4);}
+	| QUOTE name QUOTE														{$$ = new compiler::Condition("string", $2);}
 
 condition_operand:
-	GREATER_EQUAL
-	| LESS_EQUAL
-	| EQUAL_EQUAL
-	| NOT_EQUAL
-	| LEFT_ANGLE_BRACKET
-	| RIGHT_ANGLE_BRACKET
+	GREATER_EQUAL															{$$ = new compiler::Name(yytext);}
+	| LESS_EQUAL															{$$ = new compiler::Name(yytext);}
+	| EQUAL_EQUAL															{$$ = new compiler::Name(yytext);}
+	| NOT_EQUAL																{$$ = new compiler::Name(yytext);}
+	| LEFT_ANGLE_BRACKET													{$$ = new compiler::Name(yytext);}
+	| RIGHT_ANGLE_BRACKET													{$$ = new compiler::Name(yytext);}
 
 if:
 	IF LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement_with_or_without_brackets else

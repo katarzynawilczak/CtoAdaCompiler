@@ -22,4 +22,12 @@ end sum;
 begin
 Put_Line("write454356jku6h");
 variable : Integer;
+
+while a /= (variable) loop
+end loop;
+
+
+while "abc" loop
+end loop;
+
 end Output;

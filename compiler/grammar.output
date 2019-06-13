@@ -1,16 +1,3 @@
-Nonterminals useless in grammar
-
-   true_str
-   false_str
-
-
-Rules useless in grammar
-
-  104 true_str: TRUE_STR
-
-  105 false_str: FALSE_STR
-
-
 State 63 conflicts: 1 shift/reduce
 State 67 conflicts: 1 shift/reduce
 State 124 conflicts: 4 shift/reduce
@@ -112,11 +99,11 @@ Grammar
    62           | condition
 
    63 condition: expression
-   64          | NAME condition_operand expression
-   65          | LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET condition_operand expression
-   66          | LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET condition_operand LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET
-   67          | NAME condition_operand LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET
-   68          | QUOTE NAME QUOTE
+   64          | name condition_operand expression
+   65          | LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET condition_operand expression
+   66          | LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET condition_operand LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET
+   67          | name condition_operand LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET
+   68          | QUOTE name QUOTE
 
    69 condition_operand: GREATER_EQUAL
    70                  | LESS_EQUAL
@@ -185,7 +172,7 @@ RIGHT_ANGLE_BRACKET (265) 4 74
 LEFT_ANGLE_BRACKET (266) 4 73
 LEFT_CURLY_BRACKET (267) 9 10 56 94 95
 RIGHT_CURLY_BRACKET (268) 9 10 56 94 95
-NAME (269) 24 64 65 66 67 68 84 85 87 88 89 90 91 92 93 94 95 99
+NAME (269) 24 84 85 87 88 89 90 91 92 93 94 95 99
 INCLUDE (270) 4
 INT_TYPE (271) 26
 DOUBLE_TYPE (272) 27
@@ -247,7 +234,7 @@ expression (58)
     38 39 40 41 52 55 63 64 65 85 89 90 91 92 93
 name (59)
     on left: 24, on right: 4 9 10 13 21 35 36 37 38 39 40 41 42 50
-    54 55
+    54 55 64 65 66 67 68
 number (60)
     on left: 25, on right: 43
 type (61)
@@ -1023,13 +1010,13 @@ State 68
 
     QUOTE               shift, and go to state 95
     LEFT_ROUND_BRACKET  shift, and go to state 96
-    NAME                shift, and go to state 97
+    NAME                shift, and go to state 10
     NUMBER              shift, and go to state 85
     TRUE_STR            shift, and go to state 64
     FALSE_STR           shift, and go to state 65
 
-    expression  go to state 98
-    name        go to state 87
+    expression  go to state 97
+    name        go to state 98
     conditions  go to state 99
     condition   go to state 100
 
@@ -1107,13 +1094,13 @@ State 73
 
     QUOTE               shift, and go to state 95
     LEFT_ROUND_BRACKET  shift, and go to state 96
-    NAME                shift, and go to state 97
+    NAME                shift, and go to state 10
     NUMBER              shift, and go to state 85
     TRUE_STR            shift, and go to state 64
     FALSE_STR           shift, and go to state 65
 
-    expression  go to state 98
-    name        go to state 87
+    expression  go to state 97
+    name        go to state 98
     conditions  go to state 109
     condition   go to state 100
 
@@ -1322,50 +1309,34 @@ State 94
 
 State 95
 
-   68 condition: QUOTE . NAME QUOTE
+   68 condition: QUOTE . name QUOTE
 
-    NAME  shift, and go to state 128
+    NAME  shift, and go to state 10
+
+    name  go to state 128
 
 
 State 96
 
    15 expression: LEFT_ROUND_BRACKET . expression RIGHT_ROUND_BRACKET
    59 conditions: LEFT_ROUND_BRACKET . conditions RIGHT_ROUND_BRACKET
-   65 condition: LEFT_ROUND_BRACKET . NAME RIGHT_ROUND_BRACKET condition_operand expression
-   66          | LEFT_ROUND_BRACKET . NAME RIGHT_ROUND_BRACKET condition_operand LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET
+   65 condition: LEFT_ROUND_BRACKET . name RIGHT_ROUND_BRACKET condition_operand expression
+   66          | LEFT_ROUND_BRACKET . name RIGHT_ROUND_BRACKET condition_operand LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET
 
     QUOTE               shift, and go to state 95
     LEFT_ROUND_BRACKET  shift, and go to state 96
-    NAME                shift, and go to state 129
+    NAME                shift, and go to state 10
     NUMBER              shift, and go to state 85
     TRUE_STR            shift, and go to state 64
     FALSE_STR           shift, and go to state 65
 
-    expression  go to state 130
-    name        go to state 87
+    expression  go to state 129
+    name        go to state 130
     conditions  go to state 131
     condition   go to state 100
 
 
 State 97
-
-   24 name: NAME .
-   64 condition: NAME . condition_operand expression
-   67          | NAME . condition_operand LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET
-
-    RIGHT_ANGLE_BRACKET  shift, and go to state 132
-    LEFT_ANGLE_BRACKET   shift, and go to state 133
-    GREATER_EQUAL        shift, and go to state 134
-    LESS_EQUAL           shift, and go to state 135
-    EQUAL_EQUAL          shift, and go to state 136
-    NOT_EQUAL            shift, and go to state 137
-
-    $default  reduce using rule 24 (name)
-
-    condition_operand  go to state 138
-
-
-State 98
 
    16 expression: expression . PLUS expression
    17           | expression . MINUS expression
@@ -1379,6 +1350,24 @@ State 98
     DIVIDE    shift, and go to state 93
 
     $default  reduce using rule 63 (condition)
+
+
+State 98
+
+   21 expression: name .
+   64 condition: name . condition_operand expression
+   67          | name . condition_operand LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET
+
+    RIGHT_ANGLE_BRACKET  shift, and go to state 132
+    LEFT_ANGLE_BRACKET   shift, and go to state 133
+    GREATER_EQUAL        shift, and go to state 134
+    LESS_EQUAL           shift, and go to state 135
+    EQUAL_EQUAL          shift, and go to state 136
+    NOT_EQUAL            shift, and go to state 137
+
+    $default  reduce using rule 21 (expression)
+
+    condition_operand  go to state 138
 
 
 State 99
@@ -1420,13 +1409,13 @@ State 103
 
     QUOTE               shift, and go to state 95
     LEFT_ROUND_BRACKET  shift, and go to state 96
-    NAME                shift, and go to state 97
+    NAME                shift, and go to state 10
     NUMBER              shift, and go to state 85
     TRUE_STR            shift, and go to state 64
     FALSE_STR           shift, and go to state 65
 
-    expression  go to state 98
-    name        go to state 87
+    expression  go to state 97
+    name        go to state 98
     conditions  go to state 144
     condition   go to state 100
 
@@ -1715,34 +1704,12 @@ State 127
 
 State 128
 
-   68 condition: QUOTE NAME . QUOTE
+   68 condition: QUOTE name . QUOTE
 
     QUOTE  shift, and go to state 165
 
 
 State 129
-
-   24 name: NAME .
-   64 condition: NAME . condition_operand expression
-   65          | LEFT_ROUND_BRACKET NAME . RIGHT_ROUND_BRACKET condition_operand expression
-   66          | LEFT_ROUND_BRACKET NAME . RIGHT_ROUND_BRACKET condition_operand LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET
-   67          | NAME . condition_operand LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET
-
-    RIGHT_ROUND_BRACKET  shift, and go to state 166
-    RIGHT_ANGLE_BRACKET  shift, and go to state 132
-    LEFT_ANGLE_BRACKET   shift, and go to state 133
-    GREATER_EQUAL        shift, and go to state 134
-    LESS_EQUAL           shift, and go to state 135
-    EQUAL_EQUAL          shift, and go to state 136
-    NOT_EQUAL            shift, and go to state 137
-
-    RIGHT_ROUND_BRACKET  [reduce using rule 24 (name)]
-    $default             reduce using rule 24 (name)
-
-    condition_operand  go to state 138
-
-
-State 130
 
    15 expression: LEFT_ROUND_BRACKET expression . RIGHT_ROUND_BRACKET
    16           | expression . PLUS expression
@@ -1759,6 +1726,28 @@ State 130
 
     RIGHT_ROUND_BRACKET  [reduce using rule 63 (condition)]
     $default             reduce using rule 63 (condition)
+
+
+State 130
+
+   21 expression: name .
+   64 condition: name . condition_operand expression
+   65          | LEFT_ROUND_BRACKET name . RIGHT_ROUND_BRACKET condition_operand expression
+   66          | LEFT_ROUND_BRACKET name . RIGHT_ROUND_BRACKET condition_operand LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET
+   67          | name . condition_operand LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET
+
+    RIGHT_ROUND_BRACKET  shift, and go to state 166
+    RIGHT_ANGLE_BRACKET  shift, and go to state 132
+    LEFT_ANGLE_BRACKET   shift, and go to state 133
+    GREATER_EQUAL        shift, and go to state 134
+    LESS_EQUAL           shift, and go to state 135
+    EQUAL_EQUAL          shift, and go to state 136
+    NOT_EQUAL            shift, and go to state 137
+
+    RIGHT_ROUND_BRACKET  [reduce using rule 21 (expression)]
+    $default             reduce using rule 21 (expression)
+
+    condition_operand  go to state 138
 
 
 State 131
@@ -1816,8 +1805,8 @@ State 137
 
 State 138
 
-   64 condition: NAME condition_operand . expression
-   67          | NAME condition_operand . LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET
+   64 condition: name condition_operand . expression
+   67          | name condition_operand . LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET
 
     LEFT_ROUND_BRACKET  shift, and go to state 168
     NAME                shift, and go to state 10
@@ -1868,13 +1857,13 @@ State 140
 
     QUOTE               shift, and go to state 95
     LEFT_ROUND_BRACKET  shift, and go to state 96
-    NAME                shift, and go to state 97
+    NAME                shift, and go to state 10
     NUMBER              shift, and go to state 85
     TRUE_STR            shift, and go to state 64
     FALSE_STR           shift, and go to state 65
 
-    expression  go to state 98
-    name        go to state 87
+    expression  go to state 97
+    name        go to state 98
     conditions  go to state 171
     condition   go to state 100
 
@@ -1885,13 +1874,13 @@ State 141
 
     QUOTE               shift, and go to state 95
     LEFT_ROUND_BRACKET  shift, and go to state 96
-    NAME                shift, and go to state 97
+    NAME                shift, and go to state 10
     NUMBER              shift, and go to state 85
     TRUE_STR            shift, and go to state 64
     FALSE_STR           shift, and go to state 65
 
-    expression  go to state 98
-    name        go to state 87
+    expression  go to state 97
+    name        go to state 98
     conditions  go to state 172
     condition   go to state 100
 
@@ -1909,13 +1898,13 @@ State 143
 
     QUOTE               shift, and go to state 95
     LEFT_ROUND_BRACKET  shift, and go to state 96
-    NAME                shift, and go to state 97
+    NAME                shift, and go to state 10
     NUMBER              shift, and go to state 85
     TRUE_STR            shift, and go to state 64
     FALSE_STR           shift, and go to state 65
 
-    expression  go to state 98
-    name        go to state 87
+    expression  go to state 97
+    name        go to state 98
     conditions  go to state 173
     condition   go to state 100
 
@@ -2025,13 +2014,13 @@ State 152
 
     QUOTE               shift, and go to state 95
     LEFT_ROUND_BRACKET  shift, and go to state 96
-    NAME                shift, and go to state 97
+    NAME                shift, and go to state 10
     NUMBER              shift, and go to state 85
     TRUE_STR            shift, and go to state 64
     FALSE_STR           shift, and go to state 65
 
-    expression  go to state 98
-    name        go to state 87
+    expression  go to state 97
+    name        go to state 98
     conditions  go to state 184
     condition   go to state 100
 
@@ -2189,15 +2178,15 @@ State 164
 
 State 165
 
-   68 condition: QUOTE NAME QUOTE .
+   68 condition: QUOTE name QUOTE .
 
     $default  reduce using rule 68 (condition)
 
 
 State 166
 
-   65 condition: LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET . condition_operand expression
-   66          | LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET . condition_operand LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET
+   65 condition: LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET . condition_operand expression
+   66          | LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET . condition_operand LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET
 
     RIGHT_ANGLE_BRACKET  shift, and go to state 132
     LEFT_ANGLE_BRACKET   shift, and go to state 133
@@ -2219,16 +2208,16 @@ State 167
 State 168
 
    15 expression: LEFT_ROUND_BRACKET . expression RIGHT_ROUND_BRACKET
-   67 condition: NAME condition_operand LEFT_ROUND_BRACKET . NAME RIGHT_ROUND_BRACKET
+   67 condition: name condition_operand LEFT_ROUND_BRACKET . name RIGHT_ROUND_BRACKET
 
     LEFT_ROUND_BRACKET  shift, and go to state 62
-    NAME                shift, and go to state 195
+    NAME                shift, and go to state 10
     NUMBER              shift, and go to state 85
     TRUE_STR            shift, and go to state 64
     FALSE_STR           shift, and go to state 65
 
     expression  go to state 86
-    name        go to state 87
+    name        go to state 195
 
 
 State 169
@@ -2237,7 +2226,7 @@ State 169
    17           | expression . MINUS expression
    18           | expression . MULTIPLY expression
    19           | expression . DIVIDE expression
-   64 condition: NAME condition_operand expression .
+   64 condition: name condition_operand expression .
 
     PLUS      shift, and go to state 90
     MINUS     shift, and go to state 91
@@ -2498,8 +2487,8 @@ State 193
 
 State 194
 
-   65 condition: LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET condition_operand . expression
-   66          | LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET condition_operand . LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET
+   65 condition: LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET condition_operand . expression
+   66          | LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET condition_operand . LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET
 
     LEFT_ROUND_BRACKET  shift, and go to state 212
     NAME                shift, and go to state 10
@@ -2513,13 +2502,13 @@ State 194
 
 State 195
 
-   24 name: NAME .
-   67 condition: NAME condition_operand LEFT_ROUND_BRACKET NAME . RIGHT_ROUND_BRACKET
+   21 expression: name .
+   67 condition: name condition_operand LEFT_ROUND_BRACKET name . RIGHT_ROUND_BRACKET
 
     RIGHT_ROUND_BRACKET  shift, and go to state 214
 
-    RIGHT_ROUND_BRACKET  [reduce using rule 24 (name)]
-    $default             reduce using rule 24 (name)
+    RIGHT_ROUND_BRACKET  [reduce using rule 21 (expression)]
+    $default             reduce using rule 21 (expression)
 
 
 State 196
@@ -2736,16 +2725,16 @@ State 211
 State 212
 
    15 expression: LEFT_ROUND_BRACKET . expression RIGHT_ROUND_BRACKET
-   66 condition: LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET condition_operand LEFT_ROUND_BRACKET . NAME RIGHT_ROUND_BRACKET
+   66 condition: LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET condition_operand LEFT_ROUND_BRACKET . name RIGHT_ROUND_BRACKET
 
     LEFT_ROUND_BRACKET  shift, and go to state 62
-    NAME                shift, and go to state 225
+    NAME                shift, and go to state 10
     NUMBER              shift, and go to state 85
     TRUE_STR            shift, and go to state 64
     FALSE_STR           shift, and go to state 65
 
     expression  go to state 86
-    name        go to state 87
+    name        go to state 225
 
 
 State 213
@@ -2754,7 +2743,7 @@ State 213
    17           | expression . MINUS expression
    18           | expression . MULTIPLY expression
    19           | expression . DIVIDE expression
-   65 condition: LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET condition_operand expression .
+   65 condition: LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET condition_operand expression .
 
     PLUS      shift, and go to state 90
     MINUS     shift, and go to state 91
@@ -2766,7 +2755,7 @@ State 213
 
 State 214
 
-   67 condition: NAME condition_operand LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET .
+   67 condition: name condition_operand LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET .
 
     $default  reduce using rule 67 (condition)
 
@@ -2843,13 +2832,13 @@ State 224
 
 State 225
 
-   24 name: NAME .
-   66 condition: LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET condition_operand LEFT_ROUND_BRACKET NAME . RIGHT_ROUND_BRACKET
+   21 expression: name .
+   66 condition: LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET condition_operand LEFT_ROUND_BRACKET name . RIGHT_ROUND_BRACKET
 
     RIGHT_ROUND_BRACKET  shift, and go to state 230
 
-    RIGHT_ROUND_BRACKET  [reduce using rule 24 (name)]
-    $default             reduce using rule 24 (name)
+    RIGHT_ROUND_BRACKET  [reduce using rule 21 (expression)]
+    $default             reduce using rule 21 (expression)
 
 
 State 226
@@ -2936,7 +2925,7 @@ State 229
 
 State 230
 
-   66 condition: LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET condition_operand LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET .
+   66 condition: LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET condition_operand LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET .
 
     $default  reduce using rule 66 (condition)
 

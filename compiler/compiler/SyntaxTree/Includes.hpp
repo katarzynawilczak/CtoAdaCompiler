@@ -14,3 +14,6 @@
 #include "Argument.hpp"
 #include "ProcedureMainIs.hpp"
 #include "Expression.hpp"
+#include "While.hpp"
+#include "Conditions.hpp"
+#include "Condition.hpp"
