@@ -41,60 +41,73 @@
 %%
 
 input:
-	 libraries procedure_main_is function_list									{root.reset(new Input($1, $2, $3));}
+	 libraries procedure_main_is function_list								{root.reset(new Input($1, $2, $3));}
 
 libraries:
-	library libraries															{$$ = new compiler::Libraries($1, $2);}
+	library libraries														{$$ = new compiler::Libraries($1, $2);}
 	| %empty
 	
 library:
-	INCLUDE LEFT_ANGLE_BRACKET name DOT name RIGHT_ANGLE_BRACKET				{$$ = new compiler::Library($3, $5);}
+	INCLUDE LEFT_ANGLE_BRACKET name DOT name RIGHT_ANGLE_BRACKET			{$$ = new compiler::Library($3, $5);}
 	
 procedure_main_is:
-	linefeed																	{$$ = new compiler::ProcedureMainIs();}
-	| %empty																	{$$ = new compiler::ProcedureMainIs();}
+	linefeed																{$$ = new compiler::ProcedureMainIs();}
+	| %empty																{$$ = new compiler::ProcedureMainIs();}
 
 function_list:
-	function function_list														{$$ = new compiler::FunctionList($1, $2);}
-	| %empty																	{$$ = nullptr;}
+	function function_list													{$$ = new compiler::FunctionList($1, $2);}
+	| %empty																{$$ = nullptr;}
 
 function:
     type name LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET  	{$$ = new compiler::Function($1, $2, $4, $7);}  
 	| VOID_TYPE name LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
   
 argument_list:
-	argument COMMA argument_list												{$$ = new compiler::ArgumentList($1, $3);}
-	| argument																	{$$ = $1;}
+	argument COMMA argument_list											{$$ = new compiler::ArgumentList($1, $3);}
+	| argument																{$$ = $1;}
 	
 argument:
-	type name																	{$$ = new compiler::Argument($1, $2);}
-	| %empty																	{$$ = nullptr;}
+	type name																{$$ = new compiler::Argument($1, $2);}
+	| %empty																{$$ = nullptr;}
     
 expression:
-	LEFT_ROUND_BRACKET expression RIGHT_ROUND_BRACKET							{$$ = nullptr;}
-	| expression PLUS expression												{$$ = nullptr;}
-	| expression MINUS expression												{$$ = nullptr;}
-	| expression MULTIPLY expression											{$$ = nullptr;}
-	| expression DIVIDE expression												{$$ = nullptr;}
-	| NUMBER																	{$$ = $1;}
-	| name																		{$$ = $1;}
-	| TRUE_STR																	{$$ = $1;}
-	| FALSE_STR																	{$$ = $1;}
+	LEFT_ROUND_BRACKET expression RIGHT_ROUND_BRACKET						{$$ = new compiler::Expression("exp", $2);}
+	| expression PLUS expression											{$$ = new compiler::Expression("+", $1, $3);}
+	| expression MINUS expression											{$$ = new compiler::Expression("-", $1, $3);}
+	| expression MULTIPLY expression										{$$ = new compiler::Expression("*", $1, $3);}
+	| expression DIVIDE expression											{$$ = new compiler::Expression("/", $1, $3);}
+	| NUMBER																{$$ = new compiler::Name(yytext);}
+	| name																	{$$ = $1;}
+	| TRUE_STR																{$$ = new compiler::Name(yytext);}
+	| FALSE_STR																{$$ = new compiler::Name(yytext);}
+	
+	
+name:
+	NAME																	{$$ = new compiler::Name(yytext);}
+
+number:
+	NUMBER																	{$$ = new compiler::Name(yytext);}
+	
+true_str:
+	TRUE_STR																{$$ = new compiler::Name(yytext);}
+	
+false_str:
+	FALSE_STR																{$$ = new compiler::Name(yytext);}
     
 type:
-	INT_TYPE		{$$ = new compiler::Type(yytext);}
-	| DOUBLE_TYPE	{$$ = new compiler::Type(yytext);}
-	| FLOAT_TYPE	{$$ = new compiler::Type(yytext);}
-	| CHAR_TYPE		{$$ = new compiler::Type(yytext);}
-	| STRING_TYPE	{$$ = new compiler::Type(yytext);}
-	| BOOL_TYPE		{$$ = new compiler::Type(yytext);}
+	INT_TYPE																{$$ = new compiler::Type(yytext);}
+	| DOUBLE_TYPE															{$$ = new compiler::Type(yytext);}
+	| FLOAT_TYPE															{$$ = new compiler::Type(yytext);}
+	| CHAR_TYPE																{$$ = new compiler::Type(yytext);}
+	| STRING_TYPE															{$$ = new compiler::Type(yytext);}
+	| BOOL_TYPE																{$$ = new compiler::Type(yytext);}
     
 statements:
     statement statements													{$$ = new compiler::Statements($1, $2);}
     | %empty																{$$ = nullptr;}
 
 statement:
-	variable																{$$ = nullptr;}
+	variable																{$$ = new compiler::Statement("variable", $1);}
 	| name PLUS PLUS SEMICOLON												{$$ = new compiler::Statement("++", $1);}
 	| name MINUS MINUS SEMICOLON											{$$ = new compiler::Statement("--", $1);}
     | name EQUALS expression SEMICOLON										{$$ = new compiler::Statement("=", $1, $3);}
@@ -103,7 +116,7 @@ statement:
 	| name MULTIPLY EQUALS expression SEMICOLON								{$$ = new compiler::Statement("*=", $1, $4);}
 	| name DIVIDE EQUALS expression SEMICOLON 								{$$ = new compiler::Statement("/=", $1, $4);}
     | PRINTF LEFT_ROUND_BRACKET QUOTE name QUOTE RIGHT_ROUND_BRACKET SEMICOLON	{$$ = new compiler::Statement("printf", $4);}
-	| PRINTF LEFT_ROUND_BRACKET QUOTE NUMBER QUOTE RIGHT_ROUND_BRACKET SEMICOLON{$$ = new compiler::Statement("printf", $4);}
+	| PRINTF LEFT_ROUND_BRACKET QUOTE number QUOTE RIGHT_ROUND_BRACKET SEMICOLON{$$ = new compiler::Statement("printf", $4);}
 	| while																	{$$ = nullptr;}
 	| if																	{$$ = nullptr;}
 	| do_while																{$$ = nullptr;}
@@ -121,9 +134,7 @@ variable:
     type name SEMICOLON														{$$ = new compiler::Variable($1, $2);}
     | type name EQUALS expression SEMICOLON									{$$ = new compiler::Variable($1, $2, $4);}
     
-name:
-	NAME																	{$$ = new compiler::Name(yytext);}
-	
+
 statement_with_or_without_brackets:
 	LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
 	| statement

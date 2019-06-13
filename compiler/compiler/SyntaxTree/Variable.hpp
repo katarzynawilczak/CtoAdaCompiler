@@ -23,7 +23,7 @@ namespace compiler {
         virtual ~Variable() {}
         
         virtual std::string toCode() const {
-        	std::string code = "";
+        	std::string code;
         	
 			code += children[1]->toCode() + " : ";
 			
@@ -34,10 +34,11 @@ namespace compiler {
 			else if (type == "float") code += "Float";
 			else if (type == "double") code += "Float";
 			
-			if (children.size() == 2)
+			if (children[2] == nullptr)
 				code += ";\n";
 			else
 				code += " := " + children[2]->toCode() + ";\n";
+			
 			
         	return code;
         }

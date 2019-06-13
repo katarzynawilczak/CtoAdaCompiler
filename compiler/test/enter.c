@@ -8,7 +8,7 @@ double iloczyn (double a, double second) {
 	bool k = true;
 	if(c!=3) printf("1");
 	
-	c = a*b;
+	c = a*b+3-(a*c);
 	return c;
 }
 
@@ -16,8 +16,8 @@ int sum (int a, int b) {
 	int c;
 	a++;
 	b--;
-	a+=4;
-	a-=2;
+	a+=b;
+	a /=   4;
 	printf("45");
 	return a+b;
 }
@@ -28,7 +28,7 @@ void foo(){printf("foo");return;}
 int main() {
 	//again 2+4
 	
-	printf("write");
+	printf("write454356jku6h");
 	
 	if (a!=b) {
 		int c = a+3;
