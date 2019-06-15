@@ -17,3 +17,6 @@
 #include "While.hpp"
 #include "Conditions.hpp"
 #include "Condition.hpp"
+#include "IfElse.hpp"
+#include "ElseIfs.hpp"
+#include "Return.hpp"

@@ -4,17 +4,18 @@
 
 namespace compiler {
     class Type : public SyntaxTree {
-    
+        
+	private:
+        std::string type;
+        
 	public:
-        Type(const std::string &type) : type(type) {}
+        Type(std::string typeArg) {type = typeArg;}
         
         virtual ~Type() = default;
         
         virtual std::string toCode() const {
         	return type;
         }
-    
-	private:
-        std::string type;
+
     };
 }

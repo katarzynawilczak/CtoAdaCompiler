@@ -13,6 +13,8 @@ namespace compiler {
         virtual std::string toCode() const {
         	if (name == "!=")
         		return "/=";
+        	else if (name == "==")
+        		return "=";
         	else
         		return name;
         }

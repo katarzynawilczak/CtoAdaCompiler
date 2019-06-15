@@ -1,3 +1,7 @@
 declarations before begin
 put_line does not work with spaces in string
 Condition: isn't "expression condition_operand expression" enough?
+do_while
+for
+switch
+return_statement

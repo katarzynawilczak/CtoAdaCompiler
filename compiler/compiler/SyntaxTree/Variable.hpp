@@ -27,12 +27,7 @@ namespace compiler {
         	
 			code += children[1]->toCode() + " : ";
 			
-			std::string type = children[0]->toCode();
-			if 		(type == "int") code += "Integer";
-			else if (type == "char") code += "Character";
-			else if (type == "bool") code += "Boolean";
-			else if (type == "float") code += "Float";
-			else if (type == "double") code += "Float";
+			code += children[0]->toCode();
 			
 			if (children[2] == nullptr)
 				code += ";\n";

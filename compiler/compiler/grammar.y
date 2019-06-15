@@ -29,7 +29,7 @@
 %token INT_TYPE DOUBLE_TYPE FLOAT_TYPE CHAR_TYPE STRING_TYPE BOOL_TYPE VOID_TYPE
 %token PRINTF
 %token RETURN
-%token WHILE DO FOR IF ELSE SWITCH CASE BREAK DEFAULT
+%token WHILE DO FOR IF ELSE ELSEIF SWITCH CASE BREAK DEFAULT
 %token GREATER_EQUAL LESS_EQUAL EQUAL_EQUAL NOT_EQUAL EQUALS
 %token AND OR
 %token PLUS MINUS MULTIPLY DIVIDE
@@ -59,8 +59,8 @@ function_list:
 	| %empty																{$$ = nullptr;}
 
 function:
-    type name LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET  	{$$ = new compiler::Function($1, $2, $4, $7);}  
-	| VOID_TYPE name LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET
+    type name LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET  	{$$ = new compiler::Function($2, $4, $7, $1);}  
+	| VOID_TYPE name LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET {$$ = new compiler::Function($2, $4, $7);}
   
 argument_list:
 	argument COMMA argument_list											{$$ = new compiler::ArgumentList($1, $3);}
@@ -89,12 +89,12 @@ number:
 	NUMBER																	{$$ = new compiler::Name(yytext);}
     
 type:
-	INT_TYPE																{$$ = new compiler::Type(yytext);}
-	| DOUBLE_TYPE															{$$ = new compiler::Type(yytext);}
-	| FLOAT_TYPE															{$$ = new compiler::Type(yytext);}
-	| CHAR_TYPE																{$$ = new compiler::Type(yytext);}
-	| STRING_TYPE															{$$ = new compiler::Type(yytext);}
-	| BOOL_TYPE																{$$ = new compiler::Type(yytext);}
+	INT_TYPE																{$$ = new compiler::Type("Integer");}
+	| DOUBLE_TYPE															{$$ = new compiler::Type("Float");}
+	| FLOAT_TYPE															{$$ = new compiler::Type("Float");}
+	| CHAR_TYPE																{$$ = new compiler::Type("Character");}
+	| STRING_TYPE															{$$ = new compiler::Type("String");}
+	| BOOL_TYPE																{$$ = new compiler::Type("Boolean");}
     
 statements:
     statement statements													{$$ = new compiler::Statements($1, $2);}
@@ -112,17 +112,17 @@ statement:
     | PRINTF LEFT_ROUND_BRACKET QUOTE name QUOTE RIGHT_ROUND_BRACKET SEMICOLON	{$$ = new compiler::Statement("printf", $4);}
 	| PRINTF LEFT_ROUND_BRACKET QUOTE number QUOTE RIGHT_ROUND_BRACKET SEMICOLON{$$ = new compiler::Statement("printf", $4);}
 	| while																	{$$ = $1;}
-	| if																	{$$ = nullptr;}
+	| if																	{$$ = $1;}
 	| do_while																{$$ = nullptr;}
 	| for																	{$$ = nullptr;}
 	| switch																{$$ = nullptr;}
-	| return_statement														{$$ = nullptr;}
+	| return_statement														{$$ = $1;}
 
 return_statement:
-	RETURN name SEMICOLON
-	| RETURN NUMBER SEMICOLON
-	| RETURN expression SEMICOLON
-	| RETURN SEMICOLON
+	RETURN name SEMICOLON													{$$ = new compiler::Return($2);}
+	| RETURN number SEMICOLON												{$$ = new compiler::Return($2);}
+	| RETURN expression SEMICOLON											{$$ = new compiler::Return($2);}
+	| RETURN SEMICOLON														{$$ = new compiler::Return();}
     
 variable:
     type name SEMICOLON														{$$ = new compiler::Variable($1, $2);}
@@ -130,8 +130,8 @@ variable:
     
 
 statement_with_or_without_brackets:
-	LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET						{}
-	| statement																{}
+	LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET						{$$ = $2;}
+	| statement																{$$ = $1;}
     
 while:
 	WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement_with_or_without_brackets {$$ = new compiler::While($3, $5);}
@@ -158,12 +158,16 @@ condition_operand:
 	| LEFT_ANGLE_BRACKET													{$$ = new compiler::Name(yytext);}
 	| RIGHT_ANGLE_BRACKET													{$$ = new compiler::Name(yytext);}
 
-if:
-	IF LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement_with_or_without_brackets else
 
-else:
-	ELSE statement_with_or_without_brackets
-	| %empty
+
+if:
+	IF LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement_with_or_without_brackets else_ifs {$$ = new compiler::IfElse($3, $5, $6);}
+	| IF LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement_with_or_without_brackets else_ifs ELSE statement_with_or_without_brackets {$$ = new compiler::IfElse($3, $5, $6, $8);}
+	
+else_ifs:
+	ELSEIF LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET statement_with_or_without_brackets  {$$ = new ElseIfs($3, $5);}
+	| %empty																{$$ = nullptr;}
+
 
 do_while:
 	DO statement_with_or_without_brackets WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET SEMICOLON

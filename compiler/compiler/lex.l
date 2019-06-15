@@ -52,6 +52,7 @@ linefeed    	\n
 "while"					{return WHILE;}
 "do"					{return DO;}
 "for"					{return FOR;}
+"else if"				{return ELSEIF;}
 "if"					{return IF;}
 "else"					{return ELSE;}
 "switch"				{return SWITCH;}

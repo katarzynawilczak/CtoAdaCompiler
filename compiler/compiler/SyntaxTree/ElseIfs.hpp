@@ -5,26 +5,28 @@
 #include "SyntaxTree.hpp"
 
 namespace compiler {
-    class While : public SyntaxTree {
+    class ElseIfs : public SyntaxTree {
     
     public:
     
-		While(SyntaxTree *conditions, SyntaxTree *statements) {
+		ElseIfs(SyntaxTree *conditions, SyntaxTree *statements) {
         	children.push_back(conditions);
         	children.push_back(statements);
+
         }
         
-        virtual ~While() {}
+        virtual ~ElseIfs() {}
         
         virtual std::string toCode() const {
         	std::string code;
 
-			code += "\nwhile ";
-			code += children[0]->toCode() + " loop\n";
+			code += "elsif ";
+			code += children[0]->toCode() + " then\n";
 			
 			code += children[1]->toCode();
 			
-			code += "end loop;\n\n";
+			if (children[2] != nullptr)
+				code += children[2]->toCode();
 
         	return code;
         }
