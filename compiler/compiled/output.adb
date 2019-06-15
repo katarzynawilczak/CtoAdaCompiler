@@ -27,6 +27,8 @@ end sum;
 procedure foo is
 begin
 Put_Line("foo");
+end foo;
+
 begin
 Put_Line("write454356jku6h");
 
@@ -58,4 +60,18 @@ while "abc" loop
 Put_Line("abc");
 end loop;
 
+
+loop
+Put_Line("abc");
+exit when a /= b;
+end loop;
+
+case a is
+when 1 =>
+Put_Line("1");
+when 2 =>
+Put_Line("2");
+when others =>
+Put_Line("0");
+end case;
 end Output;

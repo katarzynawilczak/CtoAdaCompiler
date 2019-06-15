@@ -20,3 +20,8 @@
 #include "IfElse.hpp"
 #include "ElseIfs.hpp"
 #include "Return.hpp"
+#include "Switch.hpp"
+#include "Cases.hpp"
+#include "Case.hpp"
+#include "Default.hpp"
+#include "DoWhile.hpp"

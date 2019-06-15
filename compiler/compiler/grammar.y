@@ -113,9 +113,9 @@ statement:
 	| PRINTF LEFT_ROUND_BRACKET QUOTE number QUOTE RIGHT_ROUND_BRACKET SEMICOLON{$$ = new compiler::Statement("printf", $4);}
 	| while																	{$$ = $1;}
 	| if																	{$$ = $1;}
-	| do_while																{$$ = nullptr;}
+	| do_while																{$$ = $1;}
 	| for																	{$$ = nullptr;}
-	| switch																{$$ = nullptr;}
+	| switch																{$$ = $1;}
 	| return_statement														{$$ = $1;}
 
 return_statement:
@@ -170,7 +170,7 @@ else_ifs:
 
 
 do_while:
-	DO statement_with_or_without_brackets WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET SEMICOLON
+	DO statement_with_or_without_brackets WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET SEMICOLON {$$ = new compiler::DoWhile($2, $5);}
 
 for:
 	FOR LEFT_ROUND_BRACKET for_expression RIGHT_ROUND_BRACKET statement_with_or_without_brackets
@@ -196,26 +196,26 @@ for_step:
     | NAME DIVIDE EQUALS expression
 
 switch:
-	SWITCH LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET cases RIGHT_CURLY_BRACKET
-	| SWITCH LEFT_ROUND_BRACKET NAME RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET cases default RIGHT_CURLY_BRACKET
+	SWITCH LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET cases RIGHT_CURLY_BRACKET {$$ = new compiler::Switch($3, $6);}
+	| SWITCH LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET cases default RIGHT_CURLY_BRACKET {$$ = new compiler::Switch($3, $6, $7);}
 
 cases:
-	case cases
-	| case
+	case cases																						{$$ = new compiler::Cases($1, $2);}
+	| case																							{$$ = new compiler::Cases($1);}
 
 case:
-	CASE value COLON statements break
+	CASE value COLON statements break																{$$ = new compiler::Case($2, $4, $5);}
 
 value:
-	QUOTE NAME QUOTE
-	| NUMBER
+	QUOTE name QUOTE
+	| number
 
 break:
 	BREAK SEMICOLON
 	| %empty
 
 default:
-	DEFAULT COLON statements break
+	DEFAULT COLON statements break																	{$$ = new compiler::Default($3, $4);}
 
 
 %%  //implementations

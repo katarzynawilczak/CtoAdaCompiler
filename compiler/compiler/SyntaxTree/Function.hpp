@@ -46,11 +46,10 @@ namespace compiler {
 			if (children[2] != nullptr)
 				code += children[2]->toCode();
 
-        	if (children[3] != nullptr)
-        		if (children[3]->toCode() == "Integer" && children[0]->toCode() == "main")
-        			code += "end Output;";
-        		else
-        			code += "end " + children[0]->toCode() + ";\n\n";
+        	if (children[3] != nullptr && children[3]->toCode() == "Integer" && children[0]->toCode() == "main")
+        		code += "end Output;";
+       		else
+       			code += "end " + children[0]->toCode() + ";\n\n";
         	return code;
         }
     };
