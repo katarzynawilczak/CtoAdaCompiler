@@ -30,40 +30,40 @@ namespace compiler {
         	
         	else if (what == "++") {
         		std::string name = children[0]->toCode();
-        		code += name + " = " + name + " + 1;\n";
+        		code += name + " := " + name + " + 1;\n";
         	}
         	
         	else if (what == "--") {
         		std::string name = children[0]->toCode();
-        		code += name + " = " + name + " - 1;\n";
+        		code += name + " := " + name + " - 1;\n";
         	}
         	
         	else if (what == "=") {
-        		code += children[0]->toCode() + " = " + children[1]->toCode() + ";\n";
+        		code += children[0]->toCode() + " := " + children[1]->toCode() + ";\n";
         	}
         	
         	else if (what == "+=") {
         		std::string name = children[0]->toCode();
-        		code += name + " = " + name + " + " + children[1]->toCode() + ";\n";
+        		code += name + " := " + name + " + " + children[1]->toCode() + ";\n";
         	}
         	
         	else if (what == "-=") {
         		std::string name = children[0]->toCode();
-        		code += name + " = " + name + " - " + children[1]->toCode() + ";\n";
+        		code += name + " := " + name + " - " + children[1]->toCode() + ";\n";
         	}
         	
         	else if (what == "*=") {
         		std::string name = children[0]->toCode();
-        		code += name + " = " + name + " * " + children[1]->toCode() + ";\n";
+        		code += name + " := " + name + " * " + children[1]->toCode() + ";\n";
         	}
         	
         	else if (what == "/=") {
         		std::string name = children[0]->toCode();
-        		code += name + " = " + name + " / " + children[1]->toCode() + ";\n";
+        		code += name + " := " + name + " / " + children[1]->toCode() + ";\n";
         	}
         	
         	else if (what == "printf") {
-        		code += "Put_Line(\"" + children[0]->toCode() + "\");\n";
+        		code += "Ada.Text_IO.Put_Line(\"" + children[0]->toCode() + "\");\n";
         		if (children[0] == nullptr) code += "\n\nNullptr in Statement->toCode->printf\n\n";
         	}
         	return code;

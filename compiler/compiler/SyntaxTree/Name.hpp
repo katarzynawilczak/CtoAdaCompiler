@@ -15,6 +15,8 @@ namespace compiler {
         		return "/=";
         	else if (name == "==")
         		return "=";
+        	else if (name == "=")
+        		return ":=";
         	else
         		return name;
         }

@@ -119,8 +119,6 @@ statement:
 	| return_statement														{$$ = $1;}
 
 return_statement:
-	RETURN name SEMICOLON													{$$ = new compiler::Return($2);}
-	| RETURN number SEMICOLON												{$$ = new compiler::Return($2);}
 	| RETURN expression SEMICOLON											{$$ = new compiler::Return($2);}
 	| RETURN SEMICOLON														{$$ = new compiler::Return();}
     
@@ -173,27 +171,27 @@ do_while:
 	DO statement_with_or_without_brackets WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET SEMICOLON {$$ = new compiler::DoWhile($2, $5);}
 
 for:
-	FOR LEFT_ROUND_BRACKET for_expression RIGHT_ROUND_BRACKET statement_with_or_without_brackets
+	FOR LEFT_ROUND_BRACKET for_expression RIGHT_ROUND_BRACKET statement_with_or_without_brackets {$$ = new compiler::For($3, $5);}
 
 for_expression:
-	SEMICOLON conditions SEMICOLON
-	| for_statement SEMICOLON conditions SEMICOLON
-	| SEMICOLON conditions SEMICOLON for_step
-	| for_statement SEMICOLON conditions SEMICOLON for_step
+	SEMICOLON conditions SEMICOLON												{$$ = new compiler::ForExpression($2);}
+	| for_statement SEMICOLON conditions SEMICOLON								{$$ = new compiler::ForExpression("12", $1, $3);}
+	| SEMICOLON conditions SEMICOLON for_step									{$$ = new compiler::ForExpression("23", $2, $4);}
+	| for_statement SEMICOLON conditions SEMICOLON for_step						{$$ = new compiler::ForExpression($1, $3, $5);}
 
 for_statement:
-	NAME
-    | type NAME EQUALS expression
+	name																		{$$ = $1;}
+    | type name EQUALS expression
     | for_step
     
 for_step:
-	NAME PLUS PLUS
-	| NAME MINUS MINUS
-    | NAME EQUALS expression
-    | NAME PLUS EQUALS expression
-    | NAME MINUS EQUALS expression
-    | NAME MULTIPLY EQUALS expression
-    | NAME DIVIDE EQUALS expression
+	name PLUS PLUS
+	| name MINUS MINUS
+    | name EQUALS expression
+    | name PLUS EQUALS expression
+    | name MINUS EQUALS expression
+    | name MULTIPLY EQUALS expression
+    | name DIVIDE EQUALS expression
 
 switch:
 	SWITCH LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET cases RIGHT_CURLY_BRACKET {$$ = new compiler::Switch($3, $6);}
