@@ -10,7 +10,8 @@ all:
 
 grammar:
 	@echo "\033[92m"grammar compile:"\033[0m"
-	bison -v -d compiler/grammar.y
+	#bison -v -d compiler/grammar.y # grammar.output generate for debugging
+	bison -d compiler/grammar.y
 	mv grammar.tab.* compiler
 
 lex:
@@ -23,10 +24,12 @@ run:
 	$(MAKE) all
 	mkdir -p compiled
 	./bin/a.out < test/enter.c > compiled/output.adb
-	#@echo "\033[92m"output.adb compile:"\033[0m"
-	#gnatmake compiled/output.adb
-	#./compiled/output
-	$(MAKE) clean
+	
+	@echo "\033[92m"output.adb compile:"\033[0m"
+	gnatmake compiled/output.adb
+	@echo "\033[92m"output.adb run:"\033[0m"
+	./output
+	#$(MAKE) clean
 	
 clean:
 	@echo "\033[92m"cleaning:"\033[0m"

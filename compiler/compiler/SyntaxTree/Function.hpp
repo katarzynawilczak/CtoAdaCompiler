@@ -9,15 +9,17 @@ namespace compiler {
     
     public:
     
-    	Function(SyntaxTree *name, SyntaxTree *argument_list, SyntaxTree *statements) {		// for procedure (without return)
+    	Function(SyntaxTree *name, SyntaxTree *argument_list, SyntaxTree *variables, SyntaxTree *statements) {		// for procedure (without return)
         	children.push_back(name);
         	children.push_back(argument_list);
+        	children.push_back(variables);
         	children.push_back(statements);
         }
     
-		Function(SyntaxTree *name, SyntaxTree *argument_list, SyntaxTree *statements, SyntaxTree *type) { // for function (with return)
+		Function(SyntaxTree *name, SyntaxTree *argument_list, SyntaxTree *variables, SyntaxTree *statements, SyntaxTree *type) { // for function (with return)
         	children.push_back(name);
         	children.push_back(argument_list);
+        	children.push_back(variables);
         	children.push_back(statements);
         	children.push_back(type);
         }
@@ -28,25 +30,28 @@ namespace compiler {
         	std::string code;
 			
 			
-			if (children[3] == nullptr) {													// procedure (void)
+			if (children[4] == nullptr) {													// procedure (void)
 				code += "procedure " + children[0]->toCode();
 				if (children[1] != nullptr)
 					code +=  "(" + children[1]->toCode() + ")";
 				code += " is\n";
 			}
-			else if (!(children[3]->toCode() == "Integer" && children[0]->toCode() == "main")) {	// not main procedure (int main)
+			else if (!(children[4]->toCode() == "Integer" && children[0]->toCode() == "main")) {	// not main procedure (int main)
 				code += "function " + children[0]->toCode();
 				if (children[1] != nullptr)
 					code += "(" + children[1]->toCode() + ")";
-				code += " return " + children[3]->toCode() + " is\n";
+				code += " return " + children[4]->toCode() + " is\n";
 			}
 				
-			code += "begin\n";
-			
 			if (children[2] != nullptr)
 				code += children[2]->toCode();
+			
+			code += "begin\n";
+			
+			if (children[3] != nullptr)
+				code += children[3]->toCode();
 
-        	if (children[3] != nullptr && children[3]->toCode() == "Integer" && children[0]->toCode() == "main")
+        	if (children[4] != nullptr && children[4]->toCode() == "Integer" && children[0]->toCode() == "main")
         		code += "end Output;";
        		else
        			code += "end " + children[0]->toCode() + ";\n\n";

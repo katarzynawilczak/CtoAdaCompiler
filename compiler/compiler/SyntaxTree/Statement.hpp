@@ -24,11 +24,7 @@ namespace compiler {
         virtual std::string toCode() const {
         	std::string code;
         	
-        	if (what == "variable") {
-        		code += children[0]->toCode();
-        	}
-        	
-        	else if (what == "++") {
+        	if (what == "++") {
         		std::string name = children[0]->toCode();
         		code += name + " := " + name + " + 1;\n";
         	}

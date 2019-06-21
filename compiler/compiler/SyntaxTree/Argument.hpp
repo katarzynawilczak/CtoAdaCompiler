@@ -16,7 +16,7 @@ namespace compiler {
         virtual std::string toCode() const {
 			std::string code;
 			
-			code += children[1]->toCode() + " : ";
+			code += children[1]->toCode() + " : in out ";
 			
 			code += children[0]->toCode();
 			

@@ -1,14 +1,14 @@
 
 #include <math.h>
 #include <stdio.h>
+#include <stdbool.h>
 
-double iloczyn (double a, double second) {
-	double c;
-	double c = 3;
+int iloczyn (int a, int second) {
+	int c = 3;
 	bool k = true;
 	if(c!=3) printf("1");
 	
-	c = a*b+3-(a*c);
+	c = a*a+3-(a*c);
 	return c;
 }
 
@@ -26,18 +26,23 @@ void foo(){printf("foo");return;}
 
 
 int main() {
+	int a=1;
+	int b=2;
+	int c;
+	int i;
+	int variable;
 	//again 2+4
 	
 	printf("write454356jku6h");
 	
 	if (a!=b) {
-		int c = a+3;
+		c = a+3;
 	}else if(a==b) printf("equal");
-	else int c = b+3;
+	else c = b+3;
 
 	if(a==b) printf("1");
 	else if(a==0) printf("b");
-	else int b=c;
+	else b=c;
 	
 	//and another here!!!
 	/*block 
@@ -46,18 +51,18 @@ int main() {
 	a+=1;
 		comment*/
 		
-	int variable;
 
 	while(a!=(variable)){
-		int b;
+		b = 3;
+		a = variable;
 	}
 	
-	while("abc") printf("abc");
+	//while("abc") printf("abc");
 
 	do printf("abc");
 	while(a!=b);
 	
-	for(int i=0;i<10;i++){ printf("a");}
+	for(i=0;i<10;i++){ printf("a");}
 
 	switch(a){
 		case 1:

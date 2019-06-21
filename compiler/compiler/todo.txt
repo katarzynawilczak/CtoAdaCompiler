@@ -1,6 +1,5 @@
-declarations before begin
+
 put_line does not work with spaces in string
-Condition: isn't "expression condition_operand expression" enough?
 for
 printf for variables (%i, %s)
 scanf

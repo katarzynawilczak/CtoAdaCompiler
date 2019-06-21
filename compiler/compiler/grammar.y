@@ -26,7 +26,7 @@
 %token LEFT_CURLY_BRACKET RIGHT_CURLY_BRACKET	// {}
 %token NAME										// variable name, string for printf (all characters)
 %token INCLUDE									// #include
-%token INT_TYPE DOUBLE_TYPE FLOAT_TYPE CHAR_TYPE STRING_TYPE BOOL_TYPE VOID_TYPE
+%token INT_TYPE CHAR_TYPE STRING_TYPE BOOL_TYPE VOID_TYPE
 %token PRINTF
 %token RETURN
 %token WHILE DO FOR IF ELSE ELSEIF SWITCH CASE BREAK DEFAULT
@@ -59,8 +59,8 @@ function_list:
 	| %empty																{$$ = nullptr;}
 
 function:
-    type name LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET  	{$$ = new compiler::Function($2, $4, $7, $1);}  
-	| VOID_TYPE name LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET statements RIGHT_CURLY_BRACKET {$$ = new compiler::Function($2, $4, $7);}
+    type name LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET variables statements RIGHT_CURLY_BRACKET  	{$$ = new compiler::Function($2, $4, $7, $8, $1);}  
+	| VOID_TYPE name LEFT_ROUND_BRACKET argument_list RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET variables statements RIGHT_CURLY_BRACKET {$$ = new compiler::Function($2, $4, $7, $8);}
   
 argument_list:
 	argument COMMA argument_list											{$$ = new compiler::ArgumentList($1, $3);}
@@ -90,8 +90,6 @@ number:
     
 type:
 	INT_TYPE																{$$ = new compiler::Type("Integer");}
-	| DOUBLE_TYPE															{$$ = new compiler::Type("Float");}
-	| FLOAT_TYPE															{$$ = new compiler::Type("Float");}
 	| CHAR_TYPE																{$$ = new compiler::Type("Character");}
 	| STRING_TYPE															{$$ = new compiler::Type("String");}
 	| BOOL_TYPE																{$$ = new compiler::Type("Boolean");}
@@ -101,8 +99,7 @@ statements:
     | %empty																{$$ = nullptr;}
 
 statement:
-	variable																{$$ = new compiler::Statement("variable", $1);}
-	| name PLUS PLUS SEMICOLON												{$$ = new compiler::Statement("++", $1);}
+	name PLUS PLUS SEMICOLON												{$$ = new compiler::Statement("++", $1);}
 	| name MINUS MINUS SEMICOLON											{$$ = new compiler::Statement("--", $1);}
     | name EQUALS expression SEMICOLON										{$$ = new compiler::Statement("=", $1, $3);}
 	| name PLUS EQUALS expression SEMICOLON									{$$ = new compiler::Statement("+=", $1, $4);}
@@ -121,7 +118,11 @@ statement:
 return_statement:
 	| RETURN expression SEMICOLON											{$$ = new compiler::Return($2);}
 	| RETURN SEMICOLON														{$$ = new compiler::Return();}
-    
+
+variables:
+	variable variables														{$$ = new compiler::Variables($1, $2);}
+	| %empty																{$$ = nullptr;}
+
 variable:
     type name SEMICOLON														{$$ = new compiler::Variable($1, $2);}
     | type name EQUALS expression SEMICOLON									{$$ = new compiler::Variable($1, $2, $4);}

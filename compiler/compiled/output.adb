@@ -1,23 +1,22 @@
 with Ada.Text_IO;
 
 procedure Output Is
-function iloczyn(a : Float; second : Float) return Float is
-begin
-c : Float;
-c : Float := 3;
+function iloczyn(a : in out Integer; second : in out Integer) return Integer is
+c : Integer := 3;
 k : Boolean := true;
+begin
 
 if c /= 3 then
 Ada.Text_IO.Put_Line("1");
 end if;
 
-c := a * b + 3 - (a * c);
+c := a * a + 3 - (a * c);
 return c;
 end iloczyn;
 
-function sum(a : Integer; b : Integer) return Integer is
-begin
+function sum(a : in out Integer; b : in out Integer) return Integer is
 c : Integer;
+begin
 a := a + 1;
 b := b - 1;
 a := a + b;
@@ -32,15 +31,20 @@ Ada.Text_IO.Put_Line("foo");
 return;
 end foo;
 
+a : Integer := 1;
+b : Integer := 2;
+c : Integer;
+i : Integer;
+variable : Integer;
 begin
 Ada.Text_IO.Put_Line("write454356jku6h");
 
 if a /= b then
-c : Integer := a + 3;
+c := a + 3;
 elsif a = b then
 Ada.Text_IO.Put_Line("equal");
 else
-c : Integer := b + 3;
+c := b + 3;
 end if;
 
 
@@ -49,18 +53,13 @@ Ada.Text_IO.Put_Line("1");
 elsif a = 0 then
 Ada.Text_IO.Put_Line("b");
 else
-b : Integer := c;
+b := c;
 end if;
 
-variable : Integer;
 
 while a /= (variable) loop
-b : Integer;
-end loop;
-
-
-while "abc" loop
-Ada.Text_IO.Put_Line("abc");
+b := 3;
+a := variable;
 end loop;
 
 
