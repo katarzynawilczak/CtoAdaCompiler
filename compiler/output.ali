@@ -1,59 +1,51 @@
-V "GNAT Lib v7"
+V "GNAT Lib v8"
 M P W=b
 P ZX
 
 RN
 RV NO_IO
-RV SPARK_05
 
-U output%b		output.adb		914bc9c4 NE OO SU
+U output%b		output.adb		72da27c5 NE OO SU
 W ada%s			ada.ads			ada.ali
 W ada.text_io%s		a-textio.adb		a-textio.ali
 
-D ada.ads		20170106103348 76789da1 ada%s
-D a-except.ads		20151016123252 291912d5 ada.exceptions%s
-D a-ioexce.ads		20140225151544 e4a01f64 ada.io_exceptions%s
-D a-stream.ads		20141120112812 119b8fb3 ada.streams%s
-D a-tags.ads		20151016130316 01f5e3ef ada.tags%s
-D a-textio.ads		20140717063745 386df5d4 ada.text_io%s
-D a-unccon.ads		20170106103348 31484697 ada.unchecked_conversion%s
-D interfac.ads		20160502101001 5ab55268 interfaces%s
-D i-cstrea.ads		20140801100435 e53d8b8e interfaces.c_streams%s
-D output.adb		20190621181022 a9263c10 output%b
-D system.ads		20170510173650 4635ec04 system%s
-D s-crtl.ads		20141120112812 0ebbdb71 system.crtl%s
-D s-exctab.ads		20140225151139 54135002 system.exception_table%s
-D s-ficobl.ads		20140718105747 078245e4 system.file_control_block%s
-D s-parame.ads		20140801093848 7e2a0d7f system.parameters%s
-D s-soflin.ads		20151020124036 14e1eb6c system.soft_links%s
-D s-stache.ads		20140225151139 a37c21ec system.stack_checking%s
-D s-stalib.ads		20151112104907 09bd3940 system.standard_library%s
-D s-stoele.ads		20140225151139 2dc34a04 system.storage_elements%s
-D s-traent.ads		20140730135025 005bf670 system.traceback_entries%s
-D s-unstyp.ads		20160502101423 34867c83 system.unsigned_types%s
-D s-wchcon.ads		20140718092328 1b7d22d2 system.wch_con%s
+D ada.ads		20170911084841 76789da1 ada%s
+D a-except.ads		20180111085525 291912d5 ada.exceptions%s
+D a-ioexce.ads		20170908151217 e4a01f64 ada.io_exceptions%s
+D a-stream.ads		20180111085525 119b8fb3 ada.streams%s
+D a-tags.ads		20180111085525 491b781d ada.tags%s
+D a-textio.ads		20180111085525 881db35a ada.text_io%s
+D a-unccon.ads		20170908151217 0e9b276f ada.unchecked_conversion%s
+D interfac.ads		20180111085525 5ab55268 interfaces%s
+D i-cstrea.ads		20180111085525 e53d8b8e interfaces.c_streams%s
+D output.adb		20190621231452 fac7949f output%b
+D system.ads		20180111085525 4635ec04 system%s
+D s-crtl.ads		20180111085525 0ebbdb71 system.crtl%s
+D s-exctab.ads		20180111085525 54135002 system.exception_table%s
+D s-ficobl.ads		20180111085525 078245e4 system.file_control_block%s
+D s-parame.ads		20180111085525 f896c45c system.parameters%s
+D s-secsta.ads		20180111085525 283dec34 system.secondary_stack%s
+D s-soflin.ads		20180111085525 a7318a92 system.soft_links%s
+D s-stache.ads		20180111085525 a37c21ec system.stack_checking%s
+D s-stalib.ads		20180111085525 09bd3940 system.standard_library%s
+D s-stoele.ads		20180111085525 2dc34a04 system.storage_elements%s
+D s-traent.ads		20180111085525 005bf670 system.traceback_entries%s
+D s-unstyp.ads		20180111085525 34867c83 system.unsigned_types%s
+D s-wchcon.ads		20180111085525 1b7d22d2 system.wch_con%s
 X 1 ada.ads
-16K9*Ada 20e8 10|1r6 10r1 24r1 30r1 40r1 45r1 52r1 54r1 67r1 73r1 75r1 77r1
+16K9*Ada 20e8 10|1r6 7r1 16r1 18r1 29r1 41r1 43r1 45r1
 X 6 a-textio.ads
-49K13*Text_IO 471e16 10|1w10 10r5 24r5 30r5 40r5 45r5 52r5 54r5 67r5 73r5
-. 75r5 77r5
-263U14*Put_Line 10|10s13 24s13 30s13 40s13 45s13 52s13 54s13 67s13 73s13
-. 75s13 77s13
+49K13*Text_IO 471e16 10|1w10 7r5 16r5 18r5 29r5 41r5 43r5 45r5
+263U14*Put_Line 10|7s13 16s13 18s13 29s13 41s13 43s13 45s13
 X 10 output.adb
-3U11*Output 3b11 79l5 79t11
-4V10 iloczyn{integer} 4b10 4=18 4=38 15l5 15t12
-4i18 a{integer} 13r6 13r10 13r19
-4i38 second{integer}
-5i1 c{integer} 9r4 13m1 13r23 14r8
-6b1 k{boolean}
-17V10 sum{integer} 17b10 17=14 17=34 26l5 26t8
-17i14 a{integer} 20m1 20r6 22m1 22r6 23m1 23r6 25r8
-17i34 b{integer} 21m1 21r6 22r10 25r12
-18i1 c{integer}
-28U11 foo 28b11 32l5 32t8
-34i1 a{integer} 42r4 43r6 44r7 51r4 53r7 60r7 62m1 68r11 71r6
-35i1 b{integer} 42r9 44r11 47r6 51r8 56m1 61m1 68r16
-36i1 c{integer} 43m1 47m1 56r6
-37i1 i{integer}
-38i1 variable{integer} 60r13 62r6
+3U11*Output 3b11 47l5 47t11
+4V10 iloczyn{integer} 4b10 4=18 4=38 10l5 10t12
+4i18 a{integer} 8r6
+4i38 b{integer} 8r10
+5i1 c{integer} 8m1 9r8
+12U11 foo 12b11 12=15 21l5 21t8
+12b15 param{boolean} 15r4
+23i1 a{integer} 28r7 30m1 30r6 35m1 35r6 36r11 39r6
+24i1 b{integer} 28r12
+25i1 c{integer} 36r16
 

@@ -1,71 +1,39 @@
 with Ada.Text_IO;
 
 procedure Output Is
-function iloczyn(a : in out Integer; second : in out Integer) return Integer is
-c : Integer := 3;
-k : Boolean := true;
+function iloczyn(a : in out Integer; b : in out Integer) return Integer is
+c : Integer := 0;
 begin
-
-if c /= 3 then
-Ada.Text_IO.Put_Line("1");
-end if;
-
-c := a * a + 3 - (a * c);
+Ada.Text_IO.Put_Line("Iloczyn");
+c := a * b;
 return c;
 end iloczyn;
 
-function sum(a : in out Integer; b : in out Integer) return Integer is
-c : Integer;
+procedure foo(param : in out Boolean) is
 begin
-a := a + 1;
-b := b - 1;
-a := a + b;
-a := a / 4;
-Ada.Text_IO.Put_Line("45");
-return a + b;
-end sum;
 
-procedure foo is
-begin
+if param = true then
 Ada.Text_IO.Put_Line("foo");
-return;
+else
+Ada.Text_IO.Put_Line("falseFoo");
+end if;
+
 end foo;
 
-a : Integer := 1;
-b : Integer := 2;
-c : Integer;
-i : Integer;
-variable : Integer;
+a : Integer := 2;
+b : Integer := 5;
+c : Integer := 10;
 begin
-Ada.Text_IO.Put_Line("write454356jku6h");
 
-if a /= b then
-c := a + 3;
-elsif a = b then
-Ada.Text_IO.Put_Line("equal");
-else
-c := b + 3;
-end if;
-
-
-if a = b then
-Ada.Text_IO.Put_Line("1");
-elsif a = 0 then
-Ada.Text_IO.Put_Line("b");
-else
-b := c;
-end if;
-
-
-while a /= (variable) loop
-b := 3;
-a := variable;
+while a /= b loop
+Ada.Text_IO.Put_Line("loop");
+a := a + 1;
 end loop;
 
 
 loop
-Ada.Text_IO.Put_Line("abc");
-exit when a /= b;
+a := a + 1;
+exit when a /= c;
 end loop;
 
 case a is
