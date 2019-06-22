@@ -19,6 +19,11 @@ int main() {
 	int a=2;
 	int b=5;
 	int c=10;
+	int d;
+	
+	d=iloczyn(b, c);
+	printf("%d", b);
+	printf("%d", d);
 	
 	while(a!=b){
 		printf("loop");

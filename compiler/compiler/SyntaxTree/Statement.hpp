@@ -60,7 +60,10 @@ namespace compiler {
         	
         	else if (what == "printf") {
         		code += "Ada.Text_IO.Put_Line(\"" + children[0]->toCode() + "\");\n";
-        		if (children[0] == nullptr) code += "\n\nNullptr in Statement->toCode->printf\n\n";
+        	}
+        	
+        	else if (what == "printfVar") {
+        		code += "Ada.Text_IO.Put_Line(" + children[0]->toCode() + "'Image);\n";
         	}
         	return code;
         }

@@ -32,7 +32,7 @@
 %token WHILE DO FOR IF ELSE ELSEIF SWITCH CASE BREAK DEFAULT
 %token GREATER_EQUAL LESS_EQUAL EQUAL_EQUAL NOT_EQUAL EQUALS
 %token AND OR
-%token PLUS MINUS MULTIPLY DIVIDE
+%token PLUS MINUS MULTIPLY DIVIDE MODULO
 %token NUMBER TRUE_STR FALSE_STR linefeed
 
 
@@ -76,10 +76,17 @@ expression:
 	| expression MINUS expression											{$$ = new compiler::Expression("-", $1, $3);}
 	| expression MULTIPLY expression										{$$ = new compiler::Expression("*", $1, $3);}
 	| expression DIVIDE expression											{$$ = new compiler::Expression("/", $1, $3);}
+	| name LEFT_ROUND_BRACKET args_call_func RIGHT_ROUND_BRACKET			{$$ = new compiler::Expression("function call", $1, $3);}
+	| name LEFT_ROUND_BRACKET RIGHT_ROUND_BRACKET							{$$ = new compiler::Expression("function call no args", $1);}
 	| NUMBER																{$$ = new compiler::Name(yytext);}
 	| name																	{$$ = $1;}
 	| TRUE_STR																{$$ = new compiler::Name(yytext);}
 	| FALSE_STR																{$$ = new compiler::Name(yytext);}
+	
+args_call_func:
+	name COMMA args_call_func												{$$ = new compiler::ArgsCallFunc($1, $3);}
+	//| number COMMA args_call_func											{$$ = new compiler::ArgsCallFunc($1, $3);}
+	| name																	{$$ = $1;}
 	
 	
 name:
@@ -106,12 +113,12 @@ statement:
 	| name MINUS EQUALS expression SEMICOLON								{$$ = new compiler::Statement("-=", $1, $4);}
 	| name MULTIPLY EQUALS expression SEMICOLON								{$$ = new compiler::Statement("*=", $1, $4);}
 	| name DIVIDE EQUALS expression SEMICOLON 								{$$ = new compiler::Statement("/=", $1, $4);}
+	| PRINTF LEFT_ROUND_BRACKET QUOTE MODULO name QUOTE COMMA name RIGHT_ROUND_BRACKET SEMICOLON			{$$ = new compiler::Statement("printfVar", $8);}
     | PRINTF LEFT_ROUND_BRACKET QUOTE name QUOTE RIGHT_ROUND_BRACKET SEMICOLON	{$$ = new compiler::Statement("printf", $4);}
 	| PRINTF LEFT_ROUND_BRACKET QUOTE number QUOTE RIGHT_ROUND_BRACKET SEMICOLON{$$ = new compiler::Statement("printf", $4);}
 	| while																	{$$ = $1;}
 	| if																	{$$ = $1;}
 	| do_while																{$$ = $1;}
-	| for																	{$$ = nullptr;}
 	| switch																{$$ = $1;}
 	| return_statement														{$$ = $1;}
 
@@ -170,29 +177,6 @@ else_ifs:
 
 do_while:
 	DO statement_with_or_without_brackets WHILE LEFT_ROUND_BRACKET conditions RIGHT_ROUND_BRACKET SEMICOLON {$$ = new compiler::DoWhile($2, $5);}
-
-for:
-	FOR LEFT_ROUND_BRACKET for_expression RIGHT_ROUND_BRACKET statement_with_or_without_brackets {$$ = new compiler::For($3, $5);}
-
-for_expression:
-	SEMICOLON conditions SEMICOLON												{$$ = new compiler::ForExpression($2);}
-	| for_statement SEMICOLON conditions SEMICOLON								{$$ = new compiler::ForExpression("12", $1, $3);}
-	| SEMICOLON conditions SEMICOLON for_step									{$$ = new compiler::ForExpression("23", $2, $4);}
-	| for_statement SEMICOLON conditions SEMICOLON for_step						{$$ = new compiler::ForExpression($1, $3, $5);}
-
-for_statement:
-	name																		{$$ = $1;}
-    | type name EQUALS expression
-    | for_step
-    
-for_step:
-	name PLUS PLUS
-	| name MINUS MINUS
-    | name EQUALS expression
-    | name PLUS EQUALS expression
-    | name MINUS EQUALS expression
-    | name MULTIPLY EQUALS expression
-    | name DIVIDE EQUALS expression
 
 switch:
 	SWITCH LEFT_ROUND_BRACKET name RIGHT_ROUND_BRACKET LEFT_CURLY_BRACKET cases RIGHT_CURLY_BRACKET {$$ = new compiler::Switch($3, $6);}

@@ -1,5 +1,0 @@
-
-put_line does not work with spaces in string
-for
-printf for variables (%i, %s)
-scanf

@@ -29,9 +29,10 @@ run:
 	gnatmake compiled/output.adb
 	@echo "\033[92m"output.adb run:"\033[0m"
 	./output
-	#$(MAKE) clean
+	$(MAKE) clean
 	
 clean:
 	@echo "\033[92m"cleaning:"\033[0m"
 	rm -f compiled/output.out bin/a.out compiler/grammar.tab.* compiler/lex.yy.* compiler/lexgram.a
 	find . -empty -type d -delete
+	rm output.o output.ali output

@@ -25,6 +25,7 @@ linefeed    	\n
 "-"						{return MINUS;}
 "*"						{return MULTIPLY;}
 "/"						{return DIVIDE;}
+"%"						{return MODULO;}
 {quote}					{return QUOTE;}
 "{"                     {return LEFT_CURLY_BRACKET;}
 "}"                     {return RIGHT_CURLY_BRACKET;}

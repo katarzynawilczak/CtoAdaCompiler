@@ -43,6 +43,15 @@ namespace compiler {
         	else if (what == "/") {
         		code += children[0]->toCode() + " / " + children[1]->toCode();
         	}
+        	
+        	else if (what == "function call") {
+        		code += children[0]->toCode() + "(" + children[1]->toCode() + ")";
+        	}
+        	
+        	else if (what == "function call no args") {
+        		code += children[0]->toCode() + "()";
+        	}
+        	
         	return code;
         }
     };
