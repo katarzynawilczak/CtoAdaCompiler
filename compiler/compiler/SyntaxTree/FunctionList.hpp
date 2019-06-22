@@ -17,7 +17,7 @@ namespace compiler {
         	std::string code;
         	for (SyntaxTree *node : children)
         		if (node != nullptr)
-        			code += node->toCode();
+        			code +=node->toCode();
         	return code;
         }
     };

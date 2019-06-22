@@ -11,7 +11,7 @@ namespace compiler {
         virtual ~ProcedureMainIs(){};
         
         virtual std::string toCode() const {
-        	return "procedure Output Is\n";
+        	return "procedure Output Is\n\n";
         }
     
     };

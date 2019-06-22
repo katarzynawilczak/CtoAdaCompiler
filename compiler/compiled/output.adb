@@ -1,6 +1,7 @@
 with Ada.Text_IO;
 
 procedure Output Is
+
 function iloczyn(a : in out Integer; b : in out Integer) return Integer is
 c : Integer := 0;
 begin
@@ -34,7 +35,6 @@ Ada.Text_IO.Put_Line("loop");
 a := a + 1;
 end loop;
 
-
 loop
 a := a + 1;
 exit when a /= c;
@@ -48,4 +48,5 @@ Ada.Text_IO.Put_Line("2");
 when others =>
 Ada.Text_IO.Put_Line("0");
 end case;
+
 end Output;

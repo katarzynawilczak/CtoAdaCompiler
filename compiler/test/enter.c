@@ -8,6 +8,7 @@ int iloczyn (int a, int b) {
 	c = a*b;
 	return c;
 }
+
 void foo(bool param){
 	if(param==true) printf("foo");
 	else printf("falseFoo");

@@ -19,9 +19,6 @@ namespace compiler {
         	for (SyntaxTree *node : children)
         		if (node != nullptr)
         			code += node->toCode();
-        	//if (children[0] == nullptr) code += "nullptr\n";
-        	//else code += children[0]->toCode();
-        	//code+=children[1]->toCode();
         	return code;
         }
     };

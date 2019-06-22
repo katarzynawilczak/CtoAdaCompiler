@@ -23,7 +23,7 @@ namespace compiler {
 			code += children[0]->toCode();
 			
 			code += "exit when " + children[1]->toCode() + ";\n";
-			code += "end loop;\n\n";
+			code += "end loop;\n";
 
         	return code;
         }

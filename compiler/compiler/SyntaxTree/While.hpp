@@ -24,7 +24,7 @@ namespace compiler {
 			
 			code += children[1]->toCode();
 			
-			code += "end loop;\n\n";
+			code += "end loop;\n";
 
         	return code;
         }

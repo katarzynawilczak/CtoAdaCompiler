@@ -25,7 +25,7 @@ namespace compiler {
         virtual std::string toCode() const {
         	std::string code;
         	
-			code += "case " + children[0]->toCode() + " is\n";
+			code += "\ncase " + children[0]->toCode() + " is\n";
 			code += children[1]->toCode();
 			if (children[2] != nullptr)
 				code += children[2]->toCode();

@@ -52,7 +52,7 @@ namespace compiler {
 				code += children[3]->toCode();
 
         	if (children[4] != nullptr && children[4]->toCode() == "Integer" && children[0]->toCode() == "main")
-        		code += "end Output;";
+        		code += "\nend Output;";
        		else
        			code += "end " + children[0]->toCode() + ";\n\n";
         	return code;
